@@ -1,0 +1,1 @@
+export default {primary1:"rgba(9, 29, 110, 1)"}
