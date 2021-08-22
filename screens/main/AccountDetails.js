@@ -50,13 +50,13 @@ const App = ({ navigation }) => {
             <UserLinksGroup details={details} navigation={navigation} />
             <TouchableOpacity>
                 <Text style={{ fontSize: 16, fontWeight: "700", color: "rgba(9, 29, 110, 1)" }}>
-                    Switch to buyer account
+                  My Stat
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ marginTop: 60 }}>
-                <Text style={{ fontSize: 16, fontWeight: "700", color: "rgba(9, 29, 110, 1)" }}>
+                {/* <Text style={{ fontSize: 16, fontWeight: "700", color: "rgba(9, 29, 110, 1)" }}>
                     Switch to seller account
-                </Text>
+                </Text> */}
             </TouchableOpacity>
 
 

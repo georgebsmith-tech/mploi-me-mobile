@@ -2,7 +2,9 @@ import React from 'react';
 import { TouchableOpacity, Text, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const UserLink = ({ detail, page, company }) => {
+const UserLink = ({ detail, page, company,imageType }) => {
+    
+    const image= imageType*1===2?require("../assets/images/nav-pointer2.png"):require("../assets/images/arrow-right.png")
     return (
         <TouchableOpacity
             onPress={() => page()}
@@ -11,7 +13,7 @@ const UserLink = ({ detail, page, company }) => {
                 {detail.text}
             </Text>
             {
-                company ? <Image source={require("../assets/images/arrow-right.png")} /> : <Icon name="angle-right" size={20} />
+                company ? <Image source={require("../assets/images/nav-pointer2.png")} /> : <Icon name="angle-right" size={20} />
             }
 
         </TouchableOpacity>

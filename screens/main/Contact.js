@@ -20,13 +20,13 @@ import UserLink from '../../components/UserLink';
 import UserLinksGroup from '../../components/UserLinksGroup';
 
 const App = ({ navigation }) => {
-    const details = [{
-        text: "Connect Instagram", page: "Add Contact"
-    },
-    { text: "Connect Twitter", page: "Add Contact" },
-    { text: "Connect Whatsapp", page: "Add Contact" },
-    { text: "Add Contact I", page: "Add Contact" },
-    { text: "Add Contact II", page: "Add Contact" }
+    const details = [
+        // {text: "Connect Instagram", page: "Add Contact"}
+        // ,
+    // { text: "Connect Twitter", page: "Add Contact" },
+    // { text: "Connect Whatsapp", page: "Add Contact" },
+    // { text: "Add Contact I", page: "Add Contact" },
+    { text: "Add Contact", page: "Add Contact" }
 
     ]
     return (

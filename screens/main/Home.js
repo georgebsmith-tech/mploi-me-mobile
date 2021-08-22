@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext ,useCallback} from 'react'
 
 
-import { View, Text, Image, FlatList, TouchableOpacity,AsyncStorage,ScrollView } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity,AsyncStorage,ScrollView,RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import FloatingMessageButton from '../../components/buttons/FloatingMessageButton'
 import sendRequest from '../../utils/server-com/sendRequest'
@@ -11,6 +11,11 @@ import {Location,Permissions} from 'expo'
 
 
 import Loader from '../../components/Loader'
+
+
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const log = console.log
 const Home = ({ navigation, route }) => {
@@ -23,6 +28,7 @@ const getLocation=async ()=>{
 }
 
     const userContext = useContext(UserContext)
+        const [refreshing, setRefreshing] = useState(false);
 const [jobs,setJobs]=useState([])
 const [isLoading,setIsLoading]=useState(true)
 const [selectedCat,setSelectedCat]=useState(0)
@@ -52,6 +58,11 @@ const [selectedCat,setSelectedCat]=useState(0)
 
     }
 
+      const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
     const [categories,setCategories]=useState([
         "Events","Programs","Home"
     ])
@@ -79,16 +90,19 @@ const [selectedCat,setSelectedCat]=useState(0)
                 </View>
             </View>
 
-            <ScrollView>
+  
             <View style={{ alignItems: "center", paddingVertical: 36.4 }}>
-                <View style={{ position: "absolute", bottom: 50, zIndex: 10, width: "100%", paddingHorizontal: 45, height: "100%", paddingTop: 80 }}>
+                <View style={{ position: "absolute", bottom: 50, zIndex: 10, width: "100%", paddingHorizontal: 16, height: "100%", paddingTop: 80 }}>
                     <Text style={{ fontSize: 16, fontWeight: "700", color: "#fff" }}>
                         Phone Sales
                     </Text>
                     <View style={{ flexDirection: "row", justifyContent: "space-between",alignItems:"center" }}>
-                        <Text style={{ fontSize: 16, fontWeight: "700", color: "rgba(255, 255, 255, 1)", marginTop: 10 }}>
+                    <View style={{flexDirection:"row",alignItems:"center",marginTop:9}}>
+                    <Image source={require("../../assets/images/location-home.png")} />
+                        <Text style={{ fontSize: 16, fontWeight: "700", color: "rgba(255, 255, 255, 1)" ,marginLeft:4}}>
                             Port Harcourt, Nigeria
                         </Text>
+                        </View>
                       <Rate rate={4.0} />
                     </View>
                 </View>
@@ -127,6 +141,15 @@ const [selectedCat,setSelectedCat]=useState(0)
                     }
                 </ScrollView>
             </View>
+                      <ScrollView
+                    refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+            
+            >
             <JobListings navigation={navigation} jobs={jobs}/>
             </ScrollView>
         </View>
@@ -179,18 +202,18 @@ const Job = ({ job, navigation }) => {
             </View>
             <View style={{ flex: 1 }}>
                 <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-                    <Text style={{ fontSize: 16, fontWeight: "400", marginBottom: 10 }}>
+                    <Text style={{ fontSize: 16, fontWeight: "400", marginBottom: 8 }}>
                     {job.title}
                     </Text>
                              <Rate rate={4.0} fc="rgba(40, 193, 1, 1)" bc="rgba(212, 243, 204, 1)" />
                 </View>
                 <View>
-                    <Text style={{ fontSize: 14, color: "rgba(130, 130, 130, 1)" }}>
-                     {job.description}
+                    <Text style={{ fontSize: 13, color: "rgba(130, 130, 130, 1)",fontFamily:"Open Sans" }}>
+                     {job.description.substr(0,68)}...
                     </Text>
                 </View>
 
-                <Text style={{ fontSize: 12, fontWeight: "700", marginTop: 10 }}>
+                <Text style={{ fontSize: 12, fontWeight: "700", marginTop: 9,color:"rgba(58, 74, 139, 1)" }}>
                     ₦{job.price}
                 </Text>
             </View>

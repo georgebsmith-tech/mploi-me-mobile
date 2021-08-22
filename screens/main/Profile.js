@@ -21,7 +21,17 @@ const SettingsModal= ({navigation,isVisible,setIsVisible})=>{
         const details = [{
         text: "Account Details", page: "Account-Details",stack:"Home-Stack"
     },
-    { text: "Interest", page: "Contact" },
+    { text: "Interest", page: "Interests" },
+
+    ]
+
+       const details2 = [{
+        text: "Terms of service", page: "",stack:"Home-S"
+    },
+    { text: "Privacy Policy", page: "" },
+    {
+        text:"FAQ/Contact us",page:"",stack:""
+    }
 
     ]
 
@@ -48,7 +58,7 @@ log("log out")
                         <View style={{alignItems:"center",width:"100%"}}>
                         <Pressable 
                         onPress={() => setIsVisible(false)}
-                        style={{width:56,height:6,backgroundColor:"rgba(224, 224, 224, 1)",marginTop:4}}>
+                        style={{width:56,height:6,backgroundColor:"rgba(224, 224, 224, 1)",marginTop:4,borderRadius:100}}>
 
                         </Pressable>
 
@@ -75,7 +85,7 @@ Upgrade
 
                             <UserLinksGroup details={details} navigation={navigation} />
 
-                            <UserLinksGroup details={details} navigation={navigation} />
+                            <UserLinksGroup details={details2} navigation={navigation} imageType={2}/>
                             </View>
                   
                             <View style={{ alignItems: "center", marginBottom: 35 }}>
@@ -203,7 +213,16 @@ useEffect(() => {
                  >
             <View style={{ alignItems: "center", marginTop: 30 }}>
                 <View>
-                    <Image source={require("../../assets/images/avatar.png")} />
+  <View style={{width:80,height:80,borderColor:"red",borderWidth:2,borderRadius:24}}>
+                    <Image source={{uri:userContext.user.avatar}} 
+                    style={{width:"100%",height:"100%",resizeMode:"cover"}}
+                    />
+                    </View>
+                                  <TouchableOpacity
+                                  style={{position:"absolute",top:7.5,right:7.5}}
+                                  >
+ <Image source={require("../../assets/images/edit-profile.png")} />
+                </TouchableOpacity>
                 </View>
                 <Text style={{ fontWeight: "700", marginTop: 10, marginBottom: 3 }}>
                     {`${userContext.user.lastName} ${userContext.user.firstName}`}
@@ -276,13 +295,24 @@ renderItem={(job)=>(
 const MyJobs=({navigation})=>{
     return (
         <View style={{marginHorizontal:30,alignItems:"center"}}>
-<FlatList
+  <TouchableOpacity
+    onPress={()=>navigation.navigate("Home-Stack",{screen:"Add-Item"})}
+     style={{marginRight:8,width:96,height:96,backgroundColor:"rgba(250, 250, 250, 1)",borderRadius:2,justifyContent:"center",alignItems:"center"}}>
+     <Image source={require("../../assets/images/add-a-job.png")} /> 
+    <Text style={{color:"rgba(0,0,0,0.3)",fontWeight:"700",textAlign:"center",position:"absolute",bottom:8,width:"100%"}}>
+
+Add a job
+
+    </Text>
+    
+    </TouchableOpacity>
+{/* <FlatList
 data={[1,2]}
 renderItem={(item)=>(
     <JobRow navigation={navigation} />
     
 )}
- />
+ /> */}
 
         </View>
     )
