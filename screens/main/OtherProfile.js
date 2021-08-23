@@ -3,6 +3,7 @@ import React, { useContext ,useState,useEffect} from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { UserContext } from '../../context/provider/UserProvider';
 import sendRequest from '../../utils/server-com/sendRequest'
+import ReviewsModal from '../../components/modals/ReviewsModal'
 
 import {
      View,
@@ -42,6 +43,7 @@ const windowHeight = Dimensions.get('screen').height;
     const [isUser,setIsUser]=useState(true)
 
     const [settingsModalVisible,setSettingsModalVisible]=useState(false)
+        const [reviewModalIsVisible,setReviewModalIsVisible]=useState(false)
 
      const sendInfo = async (id) => {
 
@@ -72,9 +74,7 @@ useEffect(() => {
     
     getdata()
      
-    // return () => {
-    //     cleanup
-    // };
+
 }, []);
     // log(settingsModalVisible)
     if(isLoading){
@@ -85,6 +85,12 @@ useEffect(() => {
 
     return (
         <SafeAreaView style={{flex: 1,height:windowHeight}}>
+        <ReviewsModal
+         user={user} 
+         navigation={navigation} 
+         isVisible={reviewModalIsVisible}
+         setIsVisible={setReviewModalIsVisible}
+         />
 
         <View style={{ backgroundColor: "#fff",flex:1 }}>
 
@@ -188,7 +194,7 @@ useEffect(() => {
             </View>
 
             <Info user={user} />
-            <GuestExtra navigation={navigation} />
+            <GuestExtra navigation={navigation} user={user} setReviewModalIsVisible={setReviewModalIsVisible} />
           
 
 
@@ -203,7 +209,7 @@ export default OtherProfile;
 
 
 
-const GuestExtra = ({ navigation }) => {
+const GuestExtra = ({ navigation,user,setReviewModalIsVisible }) => {
     const userContext = useContext(UserContext)
     return (
         <View>
@@ -230,7 +236,7 @@ const GuestExtra = ({ navigation }) => {
             <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 50 }}>
                 <View style={{ flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                     <Icon name="star" style={{ marginRight: 3, color: "rgba(47, 128, 237, 1)" }} />
-                    <TouchableOpacity onPress={() => navigation.navigate("Home-Stack", { screen: "Ratings" })}>
+                    <TouchableOpacity onPress={() =>setReviewModalIsVisible(true)}>
                         <Text style={{ color: "rgba(47, 128, 237, 1)", fontWeight: "400", textAlign: "center" }}>
                             Reviews
                         </Text>

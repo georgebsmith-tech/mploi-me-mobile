@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useContext} from 'react';
 import type { Node } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
@@ -10,7 +10,8 @@ import {
   Button,
   View,
 } from 'react-native';
-
+import { UserContext } from '../../context/provider/UserProvider';
+import sendRequest from '../../utils/server-com/sendRequest'
 import {
   Colors,
   DebugInstructions,
@@ -24,7 +25,37 @@ import CustomButton from '../../components/buttons/CustomButton';
 import UserHeader from '../../components/UserHeader'
 import Heading from '../../components/Heading'
 
-const App = ({ navigation }) => {
+const Rating = ({ navigation,route }) => {
+  const user =route.params.user
+    const userContext = useContext(UserContext)
+
+    const [text,setText]=useState("")
+    const [rating,setRating]=useState(0)
+     const [error, setError] = useState("")
+
+
+     const sendInfo = async () => {
+
+       const body={text,rating,ratedBy:{
+         userID:userContext.user._id,
+         firstName:userContext.user.firstName,
+         lastName:userContext.user.lastName,
+         profession:userContext.user.profession
+       }}
+       console.log(body)
+    const data = await sendRequest(body, "put", `users/rates/${user._id}`)
+
+    if (data.error) {
+      setError(data.error)
+    } else {
+      console.log(data)
+      // navigation.navigate("Gender", { email,id,firstName:data.firstName })
+    }
+
+
+
+  }
+
   return (
     <View
       style={{
@@ -34,8 +65,10 @@ const App = ({ navigation }) => {
         flex: 1,
         paddingTop: 40
       }}>
-      <UserHeader navigation={navigation}>
-     <TouchableOpacity style={{backgroundColor:"rgba(9, 29, 110, 1)",paddingHorizontal:10,paddingVertical:4,borderRadius:6}}>
+      <UserHeader navigation={navigation} >
+     <TouchableOpacity
+     onPress={sendInfo}
+      style={{backgroundColor:"rgba(9, 29, 110, 1)",paddingHorizontal:10,paddingVertical:4,borderRadius:6}}>
      <Text style={{color:"#fff",fontWeight:"700"}}>
 Rate
      </Text>
@@ -43,15 +76,15 @@ Rate
      </TouchableOpacity>
 
       </UserHeader>
-<Heading caption=" Rate armstrong. ⭐" question="how do you feel about armstrong?"/>
+<Heading caption={`Rate ${user.lastName} ${user.firstName}. ⭐`} question={`how do you feel about ${user.lastName} ${user.firstName}?`}/>
 
       <View style={{ marginBottom: 25,padding:17.5 }}>
 
       <TextInput
-      placeholder={`Rate armstrong`}
+      placeholder={`Rate ${user.lastName} ${user.firstName}`}
     multiline={true}
     numberOfLines={8}
-    onChangeText={()=>{}}
+    onChangeText={(text)=>setText(text)}
     style={{backgroundColor:"rgba(224, 224, 224, 0.3)",borderRadius:8,padding:16,textAlignVertical: 'top'}}
    />
         
@@ -60,20 +93,20 @@ Rate
 
 
 
-     <Rate />
+     <Rate setRating={setRating}/>
 
     </View>
   );
 };
 
-export default App;
+export default Rating;
 
 
-const Rate=()=>{
+const Rate=({setRating})=>{
   const [rateCount,setRateCount]=useState(0)
     const content=[]
     for (let i=1;i<=5;i++){
-content.push(<TouchableOpacity onPress={()=>setRateCount(i)}>
+content.push(<TouchableOpacity onPress={()=>{setRateCount(i);setRating(i)}}>
          <Icon name="star" size={40} style={{color:i<=rateCount?"rgba(224, 235, 56, 1)":"rgba(234, 234, 234, 1)",marginRight:7.7}}/>
         
         </TouchableOpacity>)
