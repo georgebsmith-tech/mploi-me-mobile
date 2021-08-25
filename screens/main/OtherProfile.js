@@ -167,7 +167,9 @@ useEffect(() => {
  
             <View style={{ alignItems: "center"}}>
                 <View>
-                    <Image source={require("../../assets/images/avatar.png")} />
+                    <Image 
+                    
+                    source={require("../../assets/images/avatar.png")} />
                 </View>
                 <Text style={{ fontWeight: "700", marginTop: 20, marginBottom: 7 }}>
                     {`${user.lastName} ${user.firstName}`}

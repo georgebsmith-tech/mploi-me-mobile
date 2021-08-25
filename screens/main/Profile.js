@@ -5,15 +5,13 @@ import { UserContext } from '../../context/provider/UserProvider';
 
 import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Modal,Pressable ,AsyncStorage,ScrollView,RefreshControl} from 'react-native';
 import UserLinksGroup from '../../components/UserLinksGroup';
+import { wait } from '../../utils/wait';
 
 // import {} from '@react-native-community/async-storage'
 
 
 const log = console.log
 
-const wait = (timeout) => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-}
 
 const SettingsModal= ({navigation,isVisible,setIsVisible})=>{
     // const [modalVisible,setModalVisible]=useState(isVisible)
@@ -213,9 +211,9 @@ useEffect(() => {
                  >
             <View style={{ alignItems: "center", marginTop: 30 }}>
                 <View>
-  <View style={{width:80,height:80,borderColor:"red",borderWidth:2,borderRadius:24}}>
+  <View>
                     <Image source={{uri:userContext.user.avatar}} 
-                    style={{width:"100%",height:"100%",resizeMode:"cover"}}
+                    style={{width:80,height:80,resizeMode:"cover",borderRadius:24,borderColor:"rgba(237, 237, 237, 1)",borderWidth:2,borderRadius:24}}
                     />
                     </View>
                                   <TouchableOpacity

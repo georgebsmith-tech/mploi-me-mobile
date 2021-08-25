@@ -44,7 +44,6 @@ const [selectedCat,setSelectedCat]=useState(0)
     }, []);
     const getData = async () => {    // log(route)
     id  =await AsyncStorage.getItem("userID")
-    log("id"+id)
 
 
         const data = await sendRequest("", "get", "users/" + id)

@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext ,useCallback
+} from 'react'
 
 
-import { View, Text, Image, FlatList, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, TextInput, TouchableOpacity, ScrollView,RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import sendRequest from '../../utils/server-com/sendRequest'
 
@@ -9,9 +10,18 @@ import {getDate} from '../../utils/dateAndTime/getDate'
 
 import StatusLoader from '../../components/StatusLoader'
 
-const Explore = () => {
-    const [isLoading,setIsloading] =useState(false)
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
+const Explore = () => {
+
+
+useEffect(() => {
+setCurrent(0)
+}, [current])
+    const [isLoading,setIsloading] =useState(false)
+const [current,setCurrent]=useState(0)
     const when = ["All", "Today", "Yesterday", "This month", "Last Month"]
     const jobs = [{ price: 200 }, { price: 300 }, { price: 900 }, { price: 800 }, { price: 700 }, { price: 800 }, { price: 700 }]
     return (
@@ -34,20 +44,22 @@ const Explore = () => {
             <View style={{ height: 80 }}>
                 <ScrollView
 
-                    style={{ marginVertical: 24, flex: 1, flexdire: "row", height: 0 }}
+                    style={{ marginVertical: 24, flex: 1, flexdire: "row", height:0 }}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}>
                     {
                         when.map((text, idx) => {
                             return (
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                onPress={()=>setCurrent(idx)}
+                                >
                                     <Text style={{
                                         marginRight: 8,
-                                        backgroundColor: idx === 0 ? "rgba(9, 29, 110, 1)" : "rgba(246, 246, 246, 1)",
+                                        backgroundColor: idx === current ? "rgba(9, 29, 110, 1)" : "rgba(246, 246, 246, 1)",
                                         paddingHorizontal: 16,
                                         paddingVertical: 4,
                                         borderRadius: 100,
-                                        color: idx === 0 ? "#fff" : "rgba(0, 0, 0, 1)"
+                                        color: idx === current? "#fff" : "rgba(0, 0, 0, 1)"
                                     }}>
                                         {text}
                                     </Text>
@@ -58,11 +70,7 @@ const Explore = () => {
                 </ScrollView>
             </View>
             {/* <When /> */}
-            <JobListings />
-
-
-
-
+            <JobListings current={current}/>
         </View>
     )
 }
@@ -70,32 +78,36 @@ const Explore = () => {
 export default Explore;
 
 
-const When = () => {
-    // const when = 
-    return (
-        <View>
-            {
-                ["All", "Today", "Yesterday", "Last Week", "this month"].map((text) => {
-                    return (
-                        <Text>
-                            {text}
-                        </Text>
-                    )
-                })
-            }
 
-            <Text>
-                thhejjjduuu
-            </Text>
-
-        </View>
-    )
-}
+const JobListings = ({current}) => {
+     const [refreshing, setRefreshing] = useState(false);
+   
+const date= new Date()
 
 
-const JobListings = () => {
-    const [jobs,setJobs]=useState([])
+
+    const [allJobs,setAllJobs]=useState([])
+        const [jobs,setJobs]=useState([])
     const [isLoading,setIsLoading]=useState(true)
+
+
+       const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+useEffect(() => {
+if(current===1){
+    setJobs(allJobs.filter(job=>getDate(job.createdAt)===getDate(date)))
+}else if (current===0){
+    setJobs(allJobs)
+}else if (current===2){
+    const date= new Date()
+    date.setDate(date.getDate()-1)
+    // console.log(getDate(date))
+    setJobs(allJobs.filter(job=>getDate(job.createdAt)===getDate(date)))
+}
+}, [current])
+
       const getData = async () => {    // log(route)
 
         // const data = await sendRequest("", "get", "users/" + id)
@@ -103,7 +115,8 @@ const JobListings = () => {
         // userContext.setUser(data)
         // setUser(data)
    const theJobs = await sendRequest("", "get", "jobs/" )
-   setJobs(theJobs)
+   setAllJobs(theJobs)
+    setJobs(theJobs)
    setIsLoading(false)
 
 
@@ -117,11 +130,16 @@ const JobListings = () => {
     }, []);
 
     return (
-        <View style={{marginBottom:20}}>
+        <View style={{paddingBottom:40}}>
           {
             isLoading && <StatusLoader />
         }
             <FlatList
+             refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />}
                 data={jobs}
                   keyExtractor={(item) => item._id}
                   showsVerticalScrollIndicator={false}

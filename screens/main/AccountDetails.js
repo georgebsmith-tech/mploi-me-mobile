@@ -1,5 +1,4 @@
 import React from 'react';
-import type { Node } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
     StyleSheet,
@@ -9,8 +8,6 @@ import {
     TextInput,
     View,
 } from 'react-native';
-
-
 
 import colors from '../../config/colors'
 import CustomButton from '../../components/buttons/CustomButton';
@@ -59,11 +56,6 @@ const App = ({ navigation }) => {
                 </Text> */}
             </TouchableOpacity>
 
-
-
-
-
-
         </View>
     );
 };
@@ -95,3 +87,4 @@ const styles = StyleSheet.create({
         height: 2
     }
 })
+
