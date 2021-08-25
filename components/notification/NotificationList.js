@@ -5,7 +5,7 @@ import Notice from './Notice'
 
 import {wait} from '../../utils/wait'
 import {getDate} from '../../utils/dateAndTime/getDate'
-import toWhen from '../../utils/dateAndTime/toWhen'
+import toWhen, { toTimeStamp } from '../../utils/dateAndTime/toWhen'
 
 const NotificationList=({notices})=>{
 
@@ -37,14 +37,17 @@ const NotificationList=({notices})=>{
                 {
                      const preFormatedToday = new Date()
                      const today =getDate(preFormatedToday)
-                     const todayInTimeStamp= (Date.parse(preFormatedToday))/1000
+                
                     const date = notice.createdAt
                     
 const formatedDate= getDate(date)
 
 let when =toWhen(date)
-
-console.log(when)
+const isToday=formatedDate===today 
+console.log(today)
+console.log(formatedDate)
+console.log("today:"+isToday)
+const showTime =toTimeStamp(date)>=24*60*60
 
 let showNewDate=true
 if(formatedDate===today ||gottenDates.includes(formatedDate)){
@@ -77,12 +80,13 @@ You can commence.
 
           </Text>
           {
-                        showNewDate &&       <NoticeTime />
+                        isToday &&       <NoticeTime />
                     }
           </View>
           </>
       )
   }else if (notice.type==="to hire"){
+      console.log(showNewDate)
       return (
 <>
 { showNewDate && <NoticeDate notice={notice} />}
@@ -103,7 +107,7 @@ You can commence.
                  
                     </View>
                     {
-                        !showNewDate &&       <NoticeTime when ={when} />
+                        isToday &&       <NoticeTime when ={when} />
                     }
         
 
@@ -136,7 +140,7 @@ applied for the job
           </Text>
       
           {
-                        !showNewDate &&       <NoticeTime when ={when} />
+            isToday &&       <NoticeTime when ={when} />
                     }
           </View>
           </>

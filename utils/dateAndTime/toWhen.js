@@ -18,8 +18,6 @@ export default function(date){
 }
 
 
-
-
 export const toTimeStamp=(date)=>{
     return Date.parse(date)/1000
 }
