@@ -1,13 +1,15 @@
 import React,{useState,useCallback} from 'react'
-import {View,Text,ScrollView,RefreshControl,TouchableOpacity,StyleSheet} from 'react-native' 
+import {View,Text,ScrollView,RefreshControl,TouchableOpacity,StyleSheet,StatusBar} from 'react-native' 
 import Notice from './Notice'
 
 
 import {wait} from '../../utils/wait'
 import {getDate} from '../../utils/dateAndTime/getDate'
 import toWhen, { toTimeStamp } from '../../utils/dateAndTime/toWhen'
+import NoticeDate from './NoticeDate'
+import NoticeTime from './NoticeTime'
 
-const NotificationList=({notices})=>{
+const NotificationList=({notices,navigation})=>{
 
             const [refreshing, setRefreshing] = useState(false);
             const onRefresh = useCallback(() => {
@@ -44,10 +46,7 @@ const formatedDate= getDate(date)
 
 let when =toWhen(date)
 const isToday=formatedDate===today 
-console.log(today)
-console.log(formatedDate)
-console.log("today:"+isToday)
-const showTime =toTimeStamp(date)>=24*60*60
+
 
 let showNewDate=true
 if(formatedDate===today ||gottenDates.includes(formatedDate)){
@@ -61,7 +60,9 @@ if(formatedDate===today ||gottenDates.includes(formatedDate)){
       return (
           <>
           { showNewDate && <NoticeDate notice={notice} />}
-          <View style={{paddingLeft:30,paddingRight:20,marginBottom:24}}>
+          <TouchableOpacity
+          onPress={()=>navigation.navigate("Home-Stack",{screen:"Job-Payment-Notification",params:{notice}})}
+           style={{paddingLeft:30,paddingRight:20,marginBottom:24}}>
           <Text style={{flexDirection:"row",flex:1}}>
           <Text style={{color:"black",fontWeight:"700"}}>
 {
@@ -75,14 +76,14 @@ has an paid for the job
 {` ${notice.job?.title}. `}
           </Text>
           <Text>
-You can commence.
+You can commence. Click to see details.
           </Text>
 
           </Text>
           {
                         isToday &&       <NoticeTime />
                     }
-          </View>
+          </TouchableOpacity>
           </>
       )
   }else if (notice.type==="to hire"){
@@ -167,25 +168,6 @@ applied for the job
 export default NotificationList;
 
 
-const NoticeDate =({notice})=>{
-    return (
-        <View>
-                    <Text style={{ backgroundColor: "rgba(231, 232, 240, 1)", paddingHorizontal: 31.5, paddingVertical: 5 }}>
-                       {getDate(notice.createdAt)}
-                    </Text>
-                </View>
-    )
-}
-
-const NoticeTime =({when})=>{
-    return (
-        <View style={{flex:0.4,marginLeft:8,alignItems:"flex-end"}}>
-        <Text style={{ color: "rgba(107, 119, 168, 1)" }}>
-            {when}
-        </Text>
-    </View>
-    )
-}
 
 const styles = StyleSheet.create({
     input: {

@@ -65,7 +65,9 @@ const UserTab = ({ route: { params } }) => {
                          
                     ),
                 }}
-                name="Notifications" component={Notifications} />
+                name="Notifications"
+                initialParams={params}
+                 component={Notifications} />
             <UserTabNavigator.Screen
                 options={{
                     tabBarLabel: 'Profile',

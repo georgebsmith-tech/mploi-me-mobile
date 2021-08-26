@@ -1,7 +1,9 @@
 import React,{useEffect,useState,useContext,useCallback} from 'react'
 
 
-import { View, Text, Image, FlatList, StyleSheet, TextInput, TouchableOpacity, ScrollView,RefreshControl } from 'react-native';
+import { View,
+     Text, Image, FlatList, StyleSheet, TextInput, TouchableOpacity, ScrollView,RefreshControl,
+    StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { UserContext } from '../../context/provider/UserProvider';
 
@@ -11,10 +13,8 @@ import sendRequest from '../../utils/server-com/sendRequest'
 import StatusLoader from '../../components/StatusLoader';
 import NotificationList from '../../components/notification/NotificationList'
 
-const wait = (timeout) => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-}
-const Notifications = () => {
+
+const Notifications = ({navigation}) => {
         const [error, setError] = useState("")
  const [notices, setNotices] = useState([])
     const userContext = useContext(UserContext)
@@ -65,7 +65,8 @@ const Notifications = () => {
                 </TouchableOpacity>
             </View>
             <NotificationList 
-            notices={notices} />
+            notices={notices}
+            navigation={navigation} />
          
         </View>
     )

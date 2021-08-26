@@ -29,6 +29,7 @@ import MyJobs from '../screens/main/MyJobs'
 import JobUploadSuccess from '../screens/main/JobUploadSuccess';
 
 import AddContact from '../screens/main/AddContact'
+import JobPaymentNotification from '../screens/main/JobPaymentNotification';
 const AuthStackNavigator = createStackNavigator();
 
 AuthStackNavigator.navigationOptions = {
@@ -70,6 +71,10 @@ const HomeStack = ({ route: { params } }) => {
 
                 <AuthStackNavigator.Screen name="My-Jobs"
        component={MyJobs} options={{ title: "", headerShown: false, headerStyle: { borderBottomWidth: 0, elevation: 0 } }} />
+           <AuthStackNavigator.Screen
+            name="Job-Payment-Notification"
+            initialParams={params}
+       component={JobPaymentNotification} options={{ title: "", headerShown: false, headerStyle: { borderBottomWidth: 0, elevation: 0 } }} />
 
        
 
