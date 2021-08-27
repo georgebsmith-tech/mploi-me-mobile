@@ -4,6 +4,7 @@ import UserHeader from '../../components/UserHeader'
 import colors from '../../config/colors'
 import { UserContext } from '../../context/provider/UserProvider';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { commafy } from '../../utils/commafy';
 
 
 export default function JobPaymentNotification({navigation,route}) {
@@ -43,7 +44,7 @@ export default function JobPaymentNotification({navigation,route}) {
          
         
                 <Text style={{fontSize:16,fontWeight:"700",color:"rgba(58, 74, 139, 1)",marginTop:42}}>
-            Paid N{notice.job.price} for your service
+            Paid N{commafy(notice.job.price)} for your service
             </Text>
           
             <Text style={{marginTop:35,marginBottom:140}}>

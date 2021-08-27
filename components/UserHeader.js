@@ -8,7 +8,9 @@ const UserHeader = ({ children, justify = { justifyContent: "space-between" }, n
       <TouchableOpacity
         onPress={() => navigation.goBack()}
       >
-        <Image source={require("../assets/images/back1.png")} />
+     <View style={{padding:6}}>
+     <Image source={require("../assets/images/back.png")}/>
+     </View>
       </TouchableOpacity>
       {children}
     </View>

@@ -56,17 +56,16 @@ const InboxDetailed = ({navigation,route}) => {
 
     return (
      
-        <View style={{ backgroundColor: "#fff", flex: 1,height:deviceHeight}}>
+        <View style={{ backgroundColor: "#fff", flex: 1}}>
         <ChatAndMapHeader user={user} navigation={navigation} />
-
-           <KeyboardAvoidingWrapper>
-            <View style={{ marginTop: 50, justifyContent: "space-between", flex: 1,padding:20 }}>
+          
+            <View style={{ marginTop: 50, justifyContent: "space-between", flex: 1}}>
                 <Chats />
                 <MessageChannel navigation={navigation} 
                 user={user}/>
 
             </View>
-               </KeyboardAvoidingWrapper>
+             
         </View>
      
     )
@@ -77,15 +76,15 @@ export default InboxDetailed;
 const MessageChannel = ({navigation,user}) => {
     const [message,setMessage]=useState("")
     return (
-        <View style={{ flexDirection: "row"}}>
+        <View style={{ flexDirection: "row", position:"absolute",bottom:10,flex:1,marginHorizontal:5,alignItems:"flex-end"}}>
         <View style={{flex:1}}>
             <TextInput
             multiline={true}
             value={message}
             onChangeText={(text)=>setMessage(text)}
-                placeholder="Type a message" style={{ backgroundColor: "rgba(237, 237, 237, 1)", borderRadius: 30, flex: 1, marginRight: 10, padding:8,paddingHorizontal: 20 ,marginBottom:0}}
+                placeholder="Type a message" style={{ backgroundColor: "rgba(237, 237, 237, 1)", borderRadius: 30, flex: 1,paddingHorizontal: 20,paddingVertical:10,paddingRight:30}}
             />
-            <View style={{flexDirection:"row",position:"absolute",right:20,top:10}}>
+            <View style={{flexDirection:"row",position:"absolute",right:message?0:10,bottom:11}}>
             <Image
             style={{marginRight:12}}
              source={require("../../assets/images/chat-files.png")} />
@@ -102,7 +101,9 @@ const MessageChannel = ({navigation,user}) => {
             </View>
 
             {
-                message ? <TouchableOpacity>
+                message ? <TouchableOpacity 
+                style={{marginLeft:8}}
+                >
                 <Image source={require("../../assets/images/send.png")} />
             </TouchableOpacity>:<Text></Text>
             } 

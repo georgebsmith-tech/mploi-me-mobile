@@ -22,6 +22,7 @@ import {
 import UserLinksGroup from '../../components/UserLinksGroup';
 import UserHeader from '../../components/UserHeader';
 import Loader from '../../components/Loader'
+import ReportModal from '../../components/modals/ReportModal';
 
 
 // import {} from '@react-native-community/async-storage'
@@ -44,7 +45,7 @@ const windowHeight = Dimensions.get('screen').height;
 
     const [settingsModalVisible,setSettingsModalVisible]=useState(false)
         const [reviewModalIsVisible,setReviewModalIsVisible]=useState(false)
-
+        const [reportModalIsVisible,setReportModalIsVisible]=useState(false)
      const sendInfo = async (id) => {
 
     const data = await sendRequest("", "get", `users/`+id)
@@ -91,63 +92,18 @@ useEffect(() => {
          isVisible={reviewModalIsVisible}
          setIsVisible={setReviewModalIsVisible}
          />
+         <ReportModal
+                  navigation={navigation} 
+                  isVisible={reportModalIsVisible}
+                  setIsVisible={setReportModalIsVisible}
+                  user={user} 
+         />
 
         <View style={{ backgroundColor: "#fff",flex:1 }}>
 
         
 
-            {/* <View
-
-                style={{ width: "100%", height: "100%", position: "absolute", backgroundColor: "rgba(0,0,0,0.1)", top: 0, right: 0, zIndex: 10, justifyContent: "flex-end" }}>
-                <TouchableWithoutFeedback onPress={() => console.log("done")}>
-                    <View style={{ flex: 1 }}>
-
-                    </View>
-                </TouchableWithoutFeedback>
-                <View style={{ backgroundColor: "#fff", paddingTop: 30, borderTopLeftRadius: 40, borderTopRightRadius: 40 }}>
-                    <View style={{ alignItems: "center", marginBottom: 20 }}>
-                        <TouchableOpacity>
-                            <Text style={{ color: "rgba(107, 119, 168, 1)", fontWeight: "700" }}>
-                                Report This guy
-                            </Text>
-                        </TouchableOpacity>
-
-                    </View>
-                    <View style={{ padding: 20 }}>
-
-                        <Text style={{ fontWeight: "700", marginBottom: 10 }}>
-                            Why do you want report this account?
-                        </Text>
-                        <Text>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum dui vel arcu vulputate ultrices dui vel arcu vulputate ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum dui vel arcu vulputate ultrices dui vel arcu vulputate ultrices.
-                        </Text>
-                    </View>
-
-                    <View style={{ marginBottom: 25, padding: 17.5 }}>
-
-                        <TextInput
-                            placeholder={`Rate armstrong`}
-                            multiline={true}
-                            numberOfLines={8}
-                            onChangeText={() => { }}
-                            style={{ backgroundColor: "rgba(224, 224, 224, 0.3)", borderRadius: 8, padding: 16, textAlignVertical: 'top' }}
-                        />
-
-                    </View>
-                    <View style={{ alignItems: "center", marginBottom: 35 }}>
-                        <TouchableOpacity>
-                            <Text style={{ color: "rgba(235, 87, 87, 1)", fontWeight: "700" }}>
-                                Report This guy
-                            </Text>
-                        </TouchableOpacity>
-
-                    </View>
-
-                </View>
-
-
-
-            </View> */}
+            
 
             <View style={{paddingTop:20,paddingHorizontal:20}}>
  <UserHeader navigation={navigation}>
@@ -168,7 +124,7 @@ useEffect(() => {
             <View style={{ alignItems: "center"}}>
                 <View>
                     <Image 
-                    
+
                     source={require("../../assets/images/avatar.png")} />
                 </View>
                 <Text style={{ fontWeight: "700", marginTop: 20, marginBottom: 7 }}>
@@ -196,7 +152,13 @@ useEffect(() => {
             </View>
 
             <Info user={user} />
-            <GuestExtra navigation={navigation} user={user} setReviewModalIsVisible={setReviewModalIsVisible} />
+            <GuestExtra
+             navigation={navigation} 
+             user={user} 
+             setReviewModalIsVisible={setReviewModalIsVisible} 
+             setReportModalIsVisible={setReportModalIsVisible}
+
+             />
           
 
 
@@ -211,19 +173,12 @@ export default OtherProfile;
 
 
 
-const GuestExtra = ({ navigation,user,setReviewModalIsVisible }) => {
+const GuestExtra = ({ navigation,user,setReviewModalIsVisible,setReportModalIsVisible }) => {
     const userContext = useContext(UserContext)
     return (
         <View>
             <View style={{ flexDirection: "row", justifyContent: "center", marginTop: 30 }}>
-                <View style={{ flex: 1 }}>
-                    <Text style={{ color: "rgba(107, 119, 168, 1)", fontSize: 32, fontWeight: "300", textAlign: "center" }}>
-                        230
-                    </Text>
-                    <Text style={{ textAlign: "center" }}>
-                        jobs
-                    </Text>
-                </View>
+              
 
                 <View style={{ flex: 1 }}>
                     <Text style={{ color: "rgba(107, 119, 168, 1)", fontSize: 32, fontWeight: "300", textAlign: "center" }}>
@@ -249,11 +204,16 @@ const GuestExtra = ({ navigation,user,setReviewModalIsVisible }) => {
 
                 <View style={{ flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                     <Image source={require("../../assets/images/report.png")} style={{ marginRight: 3 }} />
-
-                    <Text style={{ color: "rgba(235, 87, 87, 1)", fontWeight: "400", textAlign: "center" }}>
+<TouchableOpacity
+onPress={() =>setReportModalIsVisible(true)}
+>
+<Text style={{ color: "rgba(235, 87, 87, 1)", fontWeight: "400", textAlign: "center" }}>
                         Report
                     </Text>
 
+
+</TouchableOpacity>
+                   
                 </View>
             </View>
         </View>
@@ -276,20 +236,7 @@ const [copied, setCopied] = useState(false)
   
     return (
         <View style={{ alignItems: "center" }}>
-            <View style={styles.infoContainer}>
-                <View style={styles.infoStyle}>
-                    <Icon name="instagram" size={20} style={styles.pr10} />
-                    <Text>
-                        {user.instagram||"Intagram"}
-                    </Text>
-                </View>
-                <View style={styles.infoStyle}>
-                    <Icon name="twitter" size={20} style={styles.pr10} />
-                    <Text>
-                        {user.twitter || "Twitter"}
-                    </Text>
-                </View>
-            </View>
+         
 
             <View style={styles.infoContainer}>
                 <View style={styles.infoStyle}>
@@ -298,7 +245,7 @@ const [copied, setCopied] = useState(false)
                     onPress={copyToClipboard}
                     >
                     <Text>
-                        {user.phone}
+                        {user.phone||"No Phone No."}
                     </Text>
                     {
                         copied && <Text style={{elevation:3,borderWidth:1,borderColor:"#fff",justifyContent:"center",alignItems:"center",borderRadius:5,paddingHorizontal:15,paddingVertical:4,position:"absolute",right:-40,bottom:-23,fontSize:10,color:"rgba(29, 29, 29, 1)"}}>
@@ -309,12 +256,7 @@ Copied!
 
                 </TouchableOpacity>
                 </View>
-                <View style={styles.infoStyle}>
-                    <Icon name="whatsapp" size={20} style={styles.pr10} />
-                    <Text>
-                        {user.whatsapp||"WhatsApp"}
-                    </Text>
-                </View>
+             
             </View>
         </View>
     )
