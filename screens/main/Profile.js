@@ -6,6 +6,8 @@ import { UserContext } from '../../context/provider/UserProvider';
 import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity, TextInput, TouchableWithoutFeedback, Modal,Pressable ,AsyncStorage,ScrollView,RefreshControl} from 'react-native';
 import UserLinksGroup from '../../components/UserLinksGroup';
 import { wait } from '../../utils/wait';
+import ScreenWrapper from '../../components/ScreenWrapper';
+import ImagePickerOptionsModal from '../../components/modals/ImagePickerOptionsModal';
 
 // import {} from '@react-native-community/async-storage'
 
@@ -112,8 +114,11 @@ Upgrade
 
 const Profile = ({ navigation, route }) => {
 
+
     const userContext = useContext(UserContext)
+    const [uri,setUri]=useState(userContext.user.avatar)
     const [refreshing, setRefreshing] = useState(false);
+    const [pickCameraModalIsOpen,setPickCameraModalIsOpen]=useState(false)
 
     const [settingsModalVisible,setSettingsModalVisible]=useState(false)
 
@@ -136,65 +141,24 @@ useEffect(() => {
     // log(settingsModalVisible)
 
     return (
-
+<ScreenWrapper>
         <View style={{ backgroundColor: "#fff", flex: 1 }}>
+        <ImagePickerOptionsModal 
+        isVisible={pickCameraModalIsOpen}
+        navigation={navigation} 
+        setIsVisible={setPickCameraModalIsOpen}
+        setUri={setUri}
 
-            <SettingsModal navigation={navigation}  isVisible={settingsModalVisible} setIsVisible={setSettingsModalVisible}/>
-       
+        />
 
-            {/* <View
+            <SettingsModal 
+            navigation={navigation} 
+             isVisible={settingsModalVisible}
+              setIsVisible={setSettingsModalVisible}
 
-                style={{ width: "100%", height: "100%", position: "absolute", backgroundColor: "rgba(0,0,0,0.1)", top: 0, right: 0, zIndex: 10, justifyContent: "flex-end" }}>
-                <TouchableWithoutFeedback onPress={() => console.log("done")}>
-                    <View style={{ flex: 1 }}>
-
-                    </View>
-                </TouchableWithoutFeedback>
-                <View style={{ backgroundColor: "#fff", paddingTop: 30, borderTopLeftRadius: 40, borderTopRightRadius: 40 }}>
-                    <View style={{ alignItems: "center", marginBottom: 20 }}>
-                        <TouchableOpacity>
-                            <Text style={{ color: "rgba(107, 119, 168, 1)", fontWeight: "700" }}>
-                                Report This guy
-                            </Text>
-                        </TouchableOpacity>
-
-                    </View>
-                    <View style={{ padding: 20 }}>
-
-                        <Text style={{ fontWeight: "700", marginBottom: 10 }}>
-                            Why do you want report this account?
-                        </Text>
-                        <Text>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum dui vel arcu vulputate ultrices dui vel arcu vulputate ultrices.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed rutrum dui vel arcu vulputate ultrices dui vel arcu vulputate ultrices.
-                        </Text>
-                    </View>
-
-                    <View style={{ marginBottom: 25, padding: 17.5 }}>
-
-                        <TextInput
-                            placeholder={`Rate armstrong`}
-                            multiline={true}
-                            numberOfLines={8}
-                            onChangeText={() => { }}
-                            style={{ backgroundColor: "rgba(224, 224, 224, 0.3)", borderRadius: 8, padding: 16, textAlignVertical: 'top' }}
-                        />
-
-                    </View>
-                    <View style={{ alignItems: "center", marginBottom: 35 }}>
-                        <TouchableOpacity>
-                            <Text style={{ color: "rgba(235, 87, 87, 1)", fontWeight: "700" }}>
-                                Report This guy
-                            </Text>
-                        </TouchableOpacity>
-
-                    </View>
-
-                </View>
-
-
-
-            </View> */}
-            <View style={{ justifyContent: "flex-end", flexDirection: "row", padding: 20 }}><TouchableOpacity
+              />
+      
+            <View style={{ justifyContent: "flex-end", flexDirection: "row", paddingHorizontal: 20 }}><TouchableOpacity
             onPress={()=>setSettingsModalVisible(!settingsModalVisible)}
             //  onPress={() => navigation.navigate("Home-Stack", { screen: "Account-Details" })}
              >
@@ -212,11 +176,12 @@ useEffect(() => {
             <View style={{ alignItems: "center", marginTop: 30 }}>
                 <View>
   <View>
-                    <Image source={{uri:userContext.user.avatar}} 
+                    <Image source={{uri}} 
                     style={{width:80,height:80,resizeMode:"cover",borderRadius:24,borderColor:"rgba(237, 237, 237, 1)",borderWidth:2,borderRadius:24}}
                     />
                     </View>
                                   <TouchableOpacity
+                                  onPress={()=>setPickCameraModalIsOpen(true)}
                                   style={{position:"absolute",top:7.5,right:7.5}}
                                   >
  <Image source={require("../../assets/images/edit-profile.png")} />
@@ -259,6 +224,7 @@ useEffect(() => {
 </ScrollView>
 
         </View>
+        </ScreenWrapper>
 
 
     )

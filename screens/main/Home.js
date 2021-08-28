@@ -11,6 +11,7 @@ import {Location,Permissions} from 'expo'
 
 
 import Loader from '../../components/Loader'
+import ScreenWrapper from '../../components/ScreenWrapper';
 
 
 const wait = (timeout) => {
@@ -72,11 +73,11 @@ const [selectedCat,setSelectedCat]=useState(0)
     }
    
     return (
-
-        <View style={{ backgroundColor: "#fff", flex: 1, padding: 20 }}>
+<ScreenWrapper>
+        <View style={{ backgroundColor: "#fff", flex: 1, paddingHorizontal:20}}>
             <FloatingMessageButton navigation={navigation} />
 
-            <View style={{ marginTop: 20 }}>
+            <View style={{}}>
                 <Text style={{ fontSize: 14, fontWeight: "700", color: "rgba(130, 130, 130, 1)" }}>
                     Hey {user.username},
                 </Text>
@@ -152,6 +153,7 @@ const [selectedCat,setSelectedCat]=useState(0)
             <JobListings navigation={navigation} jobs={jobs}/>
             </ScrollView>
         </View>
+        </ScreenWrapper>
 
     )
 }

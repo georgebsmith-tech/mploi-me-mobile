@@ -1,15 +1,56 @@
-import React, { useState, UseState } from 'react'
+import React, { useContext, useEffect, useState, UseState } from 'react'
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { View, Text, Image, FlatList, StyleSheet, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
+import sendRequest from '../../utils/server-com/sendRequest'
+import { UserContext } from '../../context/provider/UserProvider';
+import toWhen from '../../utils/dateAndTime/toWhen';
+import StatuLoader from '../../components/StatusLoader';
+import ScreenWrapper from '../../components/ScreenWrapper';
 
 
 const Inbox = ({ navigation }) => {
     const [activeTab, setActiveTab] = useState(1)
+    const [lastChats,setLastChats]=useState([])
+    const [isLoading,setIsLoading]=useState(true)
+    const newChatsCounts= lastChats.length===0?0:lastChats.filter(chat=>!(chat.seen)).length
+//   const [time,setTime]=useState(0)
+const userContext = useContext(UserContext)
+    const sendInfo = async () => {
+       console.log(userContext.user._id)
+        const data = await sendRequest("", "get", "last-chats/"+userContext.user._id)
+        console.log(data)
+        setLastChats(data)
+          setIsLoading(false)
+        if (data.error) {
+        //   setError(data.message)
+    
+        } else {
+       
+        }
+    
+      }
+
+    //   let timeKeeper
+   useEffect(() => {
+       sendInfo()
+// timeKeeper =setInterval(()=>{
+//     setTime(time+1)
+// },6000)
+    //    return () => {
+    //        cleanup
+    //    }
+   }, [])
+//    if (isLoading){
+//        return (
+//            <StatuLoader/>
+//        )
+//    }
 
     return (
-        <View style={{ backgroundColor: "#fff", flex: 1, padding: 20 }}>
+        <ScreenWrapper>
+        <View style={{ backgroundColor: "#fff", flex: 1, paddingHorizontal: 20 }}>
             <View style={{ alignItems: "center" }}>
 
 
@@ -19,7 +60,7 @@ const Inbox = ({ navigation }) => {
                         onPress={() => setActiveTab(1)}
                         style={[styles.tab, { backgroundColor: activeTab === 1 ? "#fff" : "transparent", marginRight: 3 }]}>
                         <Text>
-                            Messages (0)
+                            Messages ({newChatsCounts})
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -35,29 +76,33 @@ const Inbox = ({ navigation }) => {
 
             <View style={{ marginTop: 50 }}>
                 {
-                    activeTab === 1 ? <Messages navigation={navigation} /> : <Requests navigation={navigation} />
+                    activeTab === 1 ? <Messages 
+                    navigation={navigation} 
+                    lastChats={lastChats}
+
+                    /> : <Requests navigation={navigation} />
                 }
 
             </View>
         </View>
+        </ScreenWrapper>
     )
 }
 
 export default Inbox;
 
 
-const Messages = ({ navigation }) => {
-    const messages = [{ read: true, content: "This is wha i meant" }, { read: false, count: 2, content: "This is wha i meant" }, { read: false, count: 10, content: "Come to my House" }, { read: false, count: 10, content: "Come to my House" },
-    { read: false, count: 10, content: "Come to my House" }]
+const Messages = ({ navigation,lastChats }) => {
+   
     return (
         <View>
         {
 
-       messages.length===0?
+       lastChats.length!==0?
             <FlatList
-                data={messages}
+                data={lastChats}
                 renderItem={({ item }) => (
-                    <Message message={item}
+                    <Message chat={item}
                         navigation={navigation}
                     />
                 )}
@@ -97,16 +142,24 @@ You have no requests yet
     )
 }
 
-const Message = ({ message, navigation }) => {
+const Message = ({ chat, navigation }) => {
+    const userContext=useContext(UserContext)
+    const name=chat.recipient._id===userContext.user._id?
+    `${chat.sender.lastName} ${chat.sender.firstName}`:
+    `${chat.recipient.lastName} ${chat.recipient.firstName}`
+    const avatar=chat.recipient._id===userContext.user._id?
+    chat.sender.avatar:
+    chat.recipient.avatar
+    const user=chat.recipient._id===userContext.user._id?chat.sender:chat.recipient
     return (
         <TouchableOpacity
-            onPress={() => navigation.push("Inbox-Detailed")}
+            onPress={() => navigation.push("Inbox-Detailed",{job:chat.job,user})}
             style={{ marginBottom: 10, padding: 10, borderBottomWidth: 1.5, borderBottomColor: "#f1f1f1", flexDirection: "row" }}>
             <View style={{ width: 48, height: 45, borderRadius: 100, marginRight: 16 }}>
-                <Image source={require("../../assets/images/place-holder.png")} style={{
+                <Image source={{uri:avatar}} style={{
                     alignSelf: 'center',
                     height: '100%',
-                    width: '100%',
+                    width: '100%', 
                     resizeMode: "cover",
                     borderRadius: 100
                 }} />
@@ -114,20 +167,20 @@ const Message = ({ message, navigation }) => {
             <View style={{ flex: 1 }}>
                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 8 }}>
                     <Text style={{ fontWeight: "700", fontSize: 16 }}>
-                        Mba Bright
+                        {`${name}`}
                     </Text>
                     <Text style={{ fontSize: 10, color: "rgba(107, 119, 168, 1)" }}>
-                        20mins ago
+                       {toWhen(chat.createdAt)}
                     </Text>
                 </View>
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                     <Text style={{ fontSize: 12 }}>
-                        {message.content.substr(0, 40)}...
+                        {chat.message.substr(0, 40)}...
                     </Text>
                     <View style={{ fontSize: 10, color: "rgba(107, 119, 168, 1)", backgroundColor: "rgba(206, 210, 226, 1)", width: 25, height: 25, justifyContent: "center", alignItems: "center", borderRadius: 100 }}>
                         {
-                            message.read ? <Icon name="check" /> : <Text style={{ fontSize: 10, fontWeight: "700" }}>
-                                {message.count}
+                            chat.seen ? <Icon name="check" /> : <Text style={{ fontSize: 10, fontWeight: "700" }}>
+                                {chat.count}
                             </Text>
                         }
 

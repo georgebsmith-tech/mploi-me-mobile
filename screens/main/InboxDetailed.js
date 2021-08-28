@@ -1,14 +1,17 @@
-import React, { useState, UseState } from 'react'
+import React, { useState, useEffect,useContext } from 'react'
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { View, Text, Image, FlatList, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, TextInput,Dimensions } from 'react-native';
 import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper'
+import { getDateAndTime, getDateAndTime2, getTime } from '../../utils/dateAndTime/getDate';
+import { UserContext } from '../../context/provider/UserProvider';
+import sendRequest from '../../utils/server-com/sendRequest'
 // import ChatAndMapHeader from '../../components/ChatAndMapHeader'
 
 
 
-const ChatAndMapHeader=({user,navigation})=>{
+const ChatAndMapHeader=({user,navigation,job})=>{
     return (
                 <View style={{backgroundColor:"rgba(250, 250, 250, 1)",padding:20,paddingVertical:30}}>
 <View>
@@ -35,7 +38,7 @@ onPress={()=>navigation.pop()}
 
 <Image source={require("../../assets/images/chat-bell.png")} style={{marginRight:2}} />
 <TouchableOpacity
-onPress={()=>navigation.navigate("Make-Payment")}
+onPress={()=>navigation.navigate("Make-Payment",{job,user})}
 >
 <Image source={require("../../assets/images/pay-icon.png")} />
 </TouchableOpacity>
@@ -50,19 +53,61 @@ onPress={()=>navigation.navigate("Make-Payment")}
 
 const InboxDetailed = ({navigation,route}) => {
     const [activeTab, setActiveTab] = useState(1)
+    const [chats,setChats]=useState([])
+    const [isLoading,setIsLoading]=useState(true)
+    const userContext = useContext(UserContext)
+  const {job}=route.params
+
 
     const deviceHeight=Dimensions.get("window").height
     const user=route.params.user
 
+    const sendInfo = async () => {
+      const body = {primaryUser:userContext.user._id,
+        job:job._id,
+        secondaryUser:user._id}
+        console.log(body)
+        let data 
+         data = await sendRequest("", "get", `chats/${body.primaryUser}/${body.secondaryUser}?job=${body.job}`)
+     
+         setChats(data)
+           setIsLoading(false)
+         if (data.error) {
+         //   setError(data.message)
+     
+         } else {
+        
+         }
+     
+       }
+ 
+    useEffect(() => {
+        sendInfo()
+     //    return () => {
+     //        cleanup
+     //    }
+    }, [])
+
+
+
     return (
      
         <View style={{ backgroundColor: "#fff", flex: 1}}>
-        <ChatAndMapHeader user={user} navigation={navigation} />
+        <ChatAndMapHeader
+         user={user} 
+         job={job}
+         navigation={navigation} />
+         
           
             <View style={{ marginTop: 50, justifyContent: "space-between", flex: 1}}>
-                <Chats />
-                <MessageChannel navigation={navigation} 
-                user={user}/>
+                <Chats chats={chats} />
+                <MessageChannel
+                 navigation={navigation} 
+                 chats={chats}
+                 setChats={setChats}
+                user={user}
+                job={job}
+                />
 
             </View>
              
@@ -73,8 +118,26 @@ const InboxDetailed = ({navigation,route}) => {
 
 export default InboxDetailed;
 
-const MessageChannel = ({navigation,user}) => {
+const MessageChannel = ({navigation,user,setChats,chats,job}) => {
+    const userContext=useContext(UserContext)
+    const createdAt=new Date()
     const [message,setMessage]=useState("")
+    const sendMessage=async ()=>{
+        try {
+            const chat={message,createdAt,sender:userContext.user._id,recipient:user._id,job:job._id}
+            setChats([...chats,chat])
+           delete chat["createdAt"]
+           console.log(chat)
+setMessage("")
+const data = await sendRequest(chat,"post","chats")
+console.log(data)
+        } catch (error) {
+            console.log(error)
+        }
+
+
+
+    }
     return (
         <View style={{ flexDirection: "row", position:"absolute",bottom:10,flex:1,marginHorizontal:5,alignItems:"flex-end"}}>
         <View style={{flex:1}}>
@@ -103,6 +166,7 @@ const MessageChannel = ({navigation,user}) => {
             {
                 message ? <TouchableOpacity 
                 style={{marginLeft:8}}
+                onPress={sendMessage}
                 >
                 <Image source={require("../../assets/images/send.png")} />
             </TouchableOpacity>:<Text></Text>
@@ -113,12 +177,13 @@ const MessageChannel = ({navigation,user}) => {
 
 
 
-const Chats = () => {
-    const chats = [3, 4, 5, 3, 5]
+const Chats = ({chats}) => {
+    
     return (
-        <View>
+        <View style={{paddingHorizontal:10,marginBottom:60}}>
             <FlatList
                 data={chats}
+                showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => (
                     <Chat chat={item} />)}
             />
@@ -128,15 +193,18 @@ const Chats = () => {
 
 
 const Chat = ({ chat }) => {
-    console.log(chat)
+    
+    const userContext=useContext(UserContext)
+    const left =chat.recipient._id===userContext.user._id
     return (
-        <View style={{ alignItems: chat === 5 ? "flex-start" : "flex-end" }}>
-            <View style={{ paddingHorizontal: 17, paddingVertical: 7, borderRadius: 20, backgroundColor: chat === 5 ? "rgba(245, 251, 255, 1)" : "rgba(33, 159, 255, 1)", marginBottom: 16 }}>
-                <Text style={{ color: chat == 5 ? "rgba(33, 159, 255, 1)" : "#fff", marginBottom: 6 }}>
-                    Hey, bruh what’s good?
+        <View style={{ alignItems: left ? "flex-start" : "flex-end" }}>
+            <View style={{ paddingHorizontal: 17, paddingVertical: 7, borderRadius: 20, backgroundColor: left ? "rgba(245, 251, 255, 1)" : "rgba(33, 159, 255, 1)", marginBottom: 5,maxWidth:"80%" }}>
+                <Text style={{ color: left ? "rgba(33, 159, 255, 1)" : "#fff", marginBottom: 6 }}>
+                  {chat.message}
                 </Text>
-                <Text style={{ fontSize: 12, color: chat === 5 ? "rgba(157, 165, 197, 1)" : "rgba(211, 236, 255, 1)", textAlign: "right" }}>
-                    2:00PM
+                <Text style={{ fontSize: 12, color: left ? "rgba(157, 165, 197, 1)" : "rgba(211, 236, 255, 1)", textAlign: "right" }}>
+                    {getTime(chat.createdAt
+                    )}
                 </Text>
             </View>
         </View>

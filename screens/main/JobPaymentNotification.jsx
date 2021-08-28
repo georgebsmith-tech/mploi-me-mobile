@@ -17,7 +17,7 @@ export default function JobPaymentNotification({navigation,route}) {
         <UserHeader
         navigation={navigation}
         >
-            <Text style={{fontSize:16,fontWeight:"700",color:"rgba(107, 119, 168, 1)"}}>
+            <Text style={{fontSize:16,fontWeight:"700",color:"rgba(107, 119, 168, 1)",alignItems:"center"}}>
                 Notification
             </Text>
             <TouchableOpacity>

@@ -9,6 +9,7 @@ import sendRequest from '../../utils/server-com/sendRequest'
 import {getDate} from '../../utils/dateAndTime/getDate'
 
 import StatusLoader from '../../components/StatusLoader'
+import ScreenWrapper from '../../components/ScreenWrapper';
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -25,10 +26,11 @@ const [current,setCurrent]=useState(0)
     const when = ["All", "Today", "Yesterday", "This month", "Last Month"]
     const jobs = [{ price: 200 }, { price: 300 }, { price: 900 }, { price: 800 }, { price: 700 }, { price: 800 }, { price: 700 }]
     return (
-        <View style={{ backgroundColor: "#fff", padding: 20, flex: 1 }}>
+        <ScreenWrapper>
+        <View style={{ backgroundColor: "#fff", paddingHorizontal: 20, flex: 1 }}>
       
 
-            <View style={{ marginTop: 20, marginBottom: 24, flexDirection: "row", justifyContent: "space-between" }}>
+            <View style={{  marginBottom: 24, flexDirection: "row", justifyContent: "space-between" }}>
                 <Text style={{ fontWeight: "700", fontSize: 24 }}>
                     Explore
                 </Text>
@@ -72,6 +74,7 @@ const [current,setCurrent]=useState(0)
             {/* <When /> */}
             <JobListings current={current}/>
         </View>
+        </ScreenWrapper>
     )
 }
 

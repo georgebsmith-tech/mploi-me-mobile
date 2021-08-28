@@ -67,7 +67,7 @@ const JobDetailed = ({ navigation,route }) => {
                     </Text>
                     <View style={{ backgroundColor: "#fff", paddingHorizontal: 67.17, paddingVertical: 16, marginTop: 40,borderRadius:12 }}>
                     <TouchableOpacity
-                    onPress={()=>navigation.navigate("Other-Profile",{id:job.createdBy.userId})}
+                    onPress={()=>navigation.navigate("Other-Profile",{id:job.createdBy.userId,job})}
                     >
                         <Text style={{ color: "rgba(9, 29, 110, 1)", fontWeight: "700" }}>
                            {`${job.createdBy.lastName} ${job.createdBy.firstName}`}

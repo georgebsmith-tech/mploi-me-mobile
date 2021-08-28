@@ -32,6 +32,7 @@ const log = console.log
 
 
 const OtherProfile = ({ navigation, route }) => {
+    console.log(route)
     const [isLoading,setIsLoading]=useState(true)
 
 const windowHeight = Dimensions.get('screen').height;
@@ -39,8 +40,9 @@ const windowHeight = Dimensions.get('screen').height;
 
     const userContext = useContext(UserContext)
     const [user,setUser]=useState({})
-    console.log(route.params)
-    const otherId=route.params.id
+    
+    const {id,job}=route.params
+    const otherId=id
     const [isUser,setIsUser]=useState(true)
 
     const [settingsModalVisible,setSettingsModalVisible]=useState(false)
@@ -109,7 +111,7 @@ useEffect(() => {
  <UserHeader navigation={navigation}>
  {
      userContext.user.role==="buyer" && <TouchableOpacity 
- onPress={()=>navigation.navigate("Inbox-Detailed",{user})}
+ onPress={()=>navigation.navigate("Inbox-Detailed",{user,job})}
  >
 <Image source={require("../../assets/images/start-convo.png")} />
  </TouchableOpacity>

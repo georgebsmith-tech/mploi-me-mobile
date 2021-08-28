@@ -12,6 +12,7 @@ import sendRequest from '../../utils/server-com/sendRequest'
 
 import StatusLoader from '../../components/StatusLoader';
 import NotificationList from '../../components/notification/NotificationList'
+import ScreenWrapper from '../../components/ScreenWrapper';
 
 
 const Notifications = ({navigation}) => {
@@ -52,9 +53,10 @@ const Notifications = ({navigation}) => {
           />
     }
     return (
+        <ScreenWrapper>
         <View style={{ backgroundColor: "#fff", flex: 1 }}>
 
-            <View style={{ marginTop: 20, marginBottom: 24, flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 20 }}>
+            <View style={{  marginBottom: 24, flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20 }}>
                 <Text style={{ fontWeight: "700", fontSize: 24 }}>
                     Notifications
                 </Text>
@@ -69,6 +71,7 @@ const Notifications = ({navigation}) => {
             navigation={navigation} />
          
         </View>
+        </ScreenWrapper>
     )
 }
 

@@ -58,3 +58,22 @@ export const getDateAndTime2 = (date) => {
     let period = date.getHours() >= 12 ? "pm" : "am"
     return getDate2(date) + `, ${hr}:${date.getMinutes()} ${period}`
 }
+
+export const getTime=(date)=>{
+    if (!date) {
+        return "Just now"
+    }
+    date = new Date(date)
+    let hr;
+    if (date.getHours() === 0)
+        hr = 12
+    else if (date.getHours() >= 13)
+        hr = date.getHours() - 12
+    else
+        hr = date.getHours()
+
+    // let hr = date.getHours() >= 13 ? date.getHours() - 12 : date.getHours()
+    let period = date.getHours() >= 12 ? "pm" : "am"
+    return  `${hr}:${date.getMinutes()} ${period}`
+
+}

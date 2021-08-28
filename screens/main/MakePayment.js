@@ -16,16 +16,18 @@ import UserHeader from '../../components/UserHeader';
 
 
 import colors from '../../config/colors';
+import ScreenWrapper from '../../components/ScreenWrapper';
 
 
-const MakePayment = ({ navigation }) => {
+const MakePayment = ({ navigation,route }) => {
+    console.log(route)
     return (
+        <ScreenWrapper>
         <View
             style={{
                 backgroundColor: 'white',
                 width: "100%",
-                padding: 20,
-                paddingVertical:40,
+                paddingHorizontal: 20,
                 flex: 1
             }}>
 
@@ -69,6 +71,7 @@ You’ll be charged
             <CustomButton title="Make-Payment" mt={80} next={() => navigation.navigate("Profile")} />
 
         </View>
+        </ScreenWrapper>
     );
 };
 
