@@ -122,18 +122,20 @@ const Profile = ({ navigation, route }) => {
 
     const [settingsModalVisible,setSettingsModalVisible]=useState(false)
 
+    console.log(uri)
+
       const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-    const getdata =async ()=>{
+    const getData =async ()=>{
         const id= await AsyncStorage.getItem("userID")
         console.log("Id:"+id)
     }
 useEffect(() => {
     
-    getdata()
+    getData()
     // return () => {
     //     cleanup
     // };

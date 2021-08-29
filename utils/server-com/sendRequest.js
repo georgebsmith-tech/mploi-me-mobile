@@ -6,7 +6,6 @@ const log = console.log
 export default async function sendData(body = "", method, url = "",form) {
     const path = `${baseURL}/${url}`
     log(path)
-log(form)
     try {
         let resp;
         if(form){
@@ -15,8 +14,9 @@ resp = await fetch(path,
                 {
                     method,
                     body,
-                    headers: {
-                        "Content-Type": "multipart/form-data"
+                    headers:{
+                        Accept:'application/json',
+                        "Content-Type":"multipart/form-data"
                     }
                 })
 log(resp)
@@ -43,9 +43,9 @@ log(resp)
                     }
                 })
         }
-log(resp)
 
         const data = await resp.json()
+        log(data)
         return data
     } catch (err) {
         log(err)

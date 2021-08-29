@@ -3,10 +3,62 @@ import React,{useState} from 'react'
 import {View,Modal,Text, TouchableOpacity,TouchableWithoutFeedback} from 'react-native';
 import colors from '../../config/colors';
 import * as ImagePicker from 'expo-image-picker';
+import sendRequest from '../../utils/server-com/sendRequest'
+import { useContext } from 'react';
+import { UserContext } from '../../context/provider/UserProvider';
+import * as FileSystem from 'expo-file-system';
 const log = console.log
 
+
 export default function ImagePickerOptionsModal({isVisible,setIsVisible,setUri}) {
+    // log(FileSystem)
+   
     const [image, setImage] = useState({})
+    const [base64String, setBase64String] = useState()
+    let uri;
+const userContext= useContext(UserContext)
+
+    const sendInfo = async (image) => {
+        FileSystem.readAsStringAsync(image.uri,{encoding:FileSystem.EncodingType.Base64})
+        .then(async string=>{
+            // log(string);
+            log(string)
+            log()
+            log()
+uri="data:image/png;base64, "+string
+setUri(uri)  
+const body ={uri}
+
+data = await sendRequest(body, "put", `users/avatar/` + userContext.user._id)
+console.log(data)
+        })
+      
+        // setError("")
+        
+        const body =new FormData()
+        // // body.append("title",title)
+        // // body.append("description",description)
+        // //  body.append("price",price)
+        //     //    body.append("enabled",isEnabled)
+        //         //  body.append("category","Tech")
+        body.append("image",image)
+      
+
+    let data
+        // const body = { title,description,url,price,enabled:isEnabled ,category:"Tech"}
+        data = await sendRequest(body, "put", `users/avatar/` + userContext.user._id,true)
+   
+        if (data.error) {
+            Alert.alert(data.error)
+            // setError(data.error)
+
+        } else {
+           
+        }
+
+    }
+
+
     const takeImage =async  (option) => {
         if (Platform.OS !== 'web') {
      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -47,10 +99,11 @@ if(option===2){
               name:result.uri.substr(result.uri.lastIndexOf("/")+1)
 
           }
-
+log(image)
           setImage(image)
-          setUri(result.uri)
-                console.log(image)
+         setUri(image.uri)
+                
+                sendInfo(image)
 }
 
     return (
