@@ -6,6 +6,8 @@ import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from 'react
 import Loader from '../../components/Loader'
 import { UserContext } from '../../context/provider/UserProvider';
 import sendRequest from "../../utils/server-com/sendRequest"
+import ScreenWrapper from '../../components/ScreenWrapper';
+import UserHeader from '../../components/UserHeader';
 
 
 const JobDetailed = ({ navigation,route }) => {
@@ -33,8 +35,12 @@ const JobDetailed = ({ navigation,route }) => {
        
     }
     return (
+     
+
+    
         <View style={{ backgroundColor: "#fff", flex: 1 }}>
             <Image source={require("../../assets/images/detailed.png")} style={{ width: "100%", height: "100%", resizeMode: "cover" }} />
+
             <View style={{ backgroundColor: "rgba(0,0,0,0.64)", width: "100%", height: "100%", position: "absolute", justifyContent: "space-between" }}>
                <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
                <TouchableOpacity
@@ -67,7 +73,7 @@ const JobDetailed = ({ navigation,route }) => {
                     </Text>
                     <View style={{ backgroundColor: "#fff", paddingHorizontal: 67.17, paddingVertical: 16, marginTop: 40,borderRadius:12 }}>
                     <TouchableOpacity
-                    onPress={()=>navigation.navigate("Other-Profile",{id:job.createdBy.userId,job})}
+                    onPress={()=>navigation.navigate("Other-Profile",{id:job.createdBy._id,job})}
                     >
                         <Text style={{ color: "rgba(9, 29, 110, 1)", fontWeight: "700" }}>
                            {`${job.createdBy.lastName} ${job.createdBy.firstName}`}
@@ -82,6 +88,7 @@ const JobDetailed = ({ navigation,route }) => {
             </View>
 
         </View>
+      
     )
 }
 

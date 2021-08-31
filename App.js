@@ -3,11 +3,15 @@ import React from 'react';;
 import Navigator from './routes/Navigator'
 
 import { UserProvider } from './context/provider/UserProvider'
+import { UserJobsProvider } from './context/provider/UserJobsProvider';
 
 const App = () => {
   return (
+    
     <UserProvider>
-      <Navigator />
+      <UserJobsProvider>
+        <Navigator />
+      </UserJobsProvider>
     </UserProvider>
 
   );

@@ -8,6 +8,9 @@ import UserLinksGroup from '../../components/UserLinksGroup';
 import { wait } from '../../utils/wait';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import ImagePickerOptionsModal from '../../components/modals/ImagePickerOptionsModal';
+import ProfileSettingsModal from '../../components/modals/ProfileSettingsModal'
+import sendData from '../../utils/server-com/sendRequest';
+import { UserJobsContext, UserJobsProvider } from '../../context/provider/UserJobsProvider';
 
 // import {} from '@react-native-community/async-storage'
 
@@ -15,106 +18,10 @@ import ImagePickerOptionsModal from '../../components/modals/ImagePickerOptionsM
 const log = console.log
 
 
-const SettingsModal= ({navigation,isVisible,setIsVisible})=>{
-    // const [modalVisible,setModalVisible]=useState(isVisible)
-    log(isVisible)
-        const details = [{
-        text: "Account Details", page: "Account-Details",stack:"Home-Stack"
-    },
-    { text: "Interest", page: "Interests" },
-
-    ]
-
-       const details2 = [{
-        text: "Terms of service", page: "",stack:"Home-S"
-    },
-    { text: "Privacy Policy", page: "" },
-    {
-        text:"FAQ/Contact us",page:"",stack:""
-    }
-
-    ]
-
-    const logOut=async ()=>{
-log("log out")
-        await AsyncStorage.removeItem("userID")
-
-        navigation.navigate("Auth",{screen:"SignIn"})
-
-    }
-    return (
-        <Modal 
-        transparent
-        visible={isVisible}
-     animationType="slide"
-        >
-                <Pressable
-                  onPress={() => setIsVisible(false)}
-                 style={{ backgroundColor: "rgba(0,0,0,0.5)", flex: 1 }}>
-                    <View style={{ flex: 1, justifyContent: "flex-end" }}>
-
-
-                        <View style={{ backgroundColor: "#fff", paddingHorizontal: 37,borderTopLeftRadius:24,borderTopRightRadius:24 }}>
-                        <View style={{alignItems:"center",width:"100%"}}>
-                        <Pressable 
-                        onPress={() => setIsVisible(false)}
-                        style={{width:56,height:6,backgroundColor:"rgba(224, 224, 224, 1)",marginTop:4,borderRadius:100}}>
-
-                        </Pressable>
-
-                        </View>
-                        <View>
-<Text style={{fontSize:18,color:"rgba(107, 119, 168, 1)",textAlign:"center",marginBottom:20,marginTop:25,fontWeight:"700"}}>
-Settings
-</Text>
-                        </View>
-                        <View>
-<Text style={{color:"rgba(79, 79, 79, 1)"}}>
-Upgrade
-</Text>
-                        </View>
-                        <View style={{backgroundColor:"rgba(211, 236, 255, 0.3)",paddingVertical:16,paddingHorizontal:20,marginTop:5,borderRadius:8}}>
-                        <Text style={{textAlign:"center",fontWeight:"700",marginBottom:7}}>
-                       Account not upgraded
-                        </Text>
-                        <Text style={{textAlign:"center",fontSize:12,color:"rgba(107, 119, 168, 1)"}}>
-                        Adding a means of identification helps us increase the authenticity and keep everyone safe from fake accounts.
-                        </Text>
-                        </View>
-                        <View style={{marginBottom:10}}>
-
-                            <UserLinksGroup details={details} navigation={navigation} />
-
-                            <UserLinksGroup details={details2} navigation={navigation} imageType={2}/>
-                            </View>
-                  
-                            <View style={{ alignItems: "center", marginBottom: 35 }}>
-                                <TouchableOpacity
-                                onPress={logOut}>
-                                    <Text style={{ color: "rgba(235, 87, 87, 1)", fontWeight: "700" }}>
-                                        Log out
-                                    </Text>
-                                </TouchableOpacity>
-                                <View style={{marginTop:20}}>
-                                       <Text style={{ color: "rgba(79, 79, 79, 1)",fontSize:12 }}>
-                                     Version 1.0
-                                    </Text>
-
-                                </View>
-
-                            </View>
-                        </View>
-                    </View>
-                </Pressable>
-
-            </Modal>
-    )
-}
-
-
 const Profile = ({ navigation, route }) => {
 
-
+const userJobsContext= useContext(UserJobsContext)
+console.log(userJobsContext)
     const userContext = useContext(UserContext)
     const [uri,setUri]=useState(userContext.user.avatar)
     const [refreshing, setRefreshing] = useState(false);
@@ -131,7 +38,8 @@ const Profile = ({ navigation, route }) => {
 
     const getData =async ()=>{
         const id= await AsyncStorage.getItem("userID")
-        console.log("Id:"+id)
+    const theJobs=await sendData("","get","jobs/"+id)
+   userJobsContext.setJobs(theJobs)
     }
 useEffect(() => {
     
@@ -153,7 +61,7 @@ useEffect(() => {
 
         />
 
-            <SettingsModal 
+            <ProfileSettingsModal 
             navigation={navigation} 
              isVisible={settingsModalVisible}
               setIsVisible={setSettingsModalVisible}
@@ -178,7 +86,7 @@ useEffect(() => {
             <View style={{ alignItems: "center", marginTop: 30 }}>
                 <View>
   <View>
-                    <Image source={{uri}} 
+                    <Image source={{uri:userContext.user.avatar}} 
                     style={{width:80,height:80,resizeMode:"cover",borderRadius:24,borderColor:"rgba(237, 237, 237, 1)",borderWidth:2,borderRadius:24}}
                     />
                     </View>
@@ -222,7 +130,7 @@ useEffect(() => {
 
             <Info navigation={navigation}/>
        
-            <MyJobs navigation={navigation} />
+            <MyJobs navigation={navigation} jobs={[...userJobsContext.jobs,{addNew:true}]}/>
 </ScrollView>
 
         </View>
@@ -234,6 +142,23 @@ useEffect(() => {
 
 export default Profile;
 
+const Job=({job,navigation})=>{
+    if(job.item.addNew){
+        return <AddNewJob  navigation={navigation} />
+    }
+    return (
+        <TouchableOpacity
+        onPress={()=>{}}
+         style={{marginRight:8,width:96,height:96,backgroundColor:"rgba(0,0,0,0.32)",borderRadius:2,marginBottom:8}}>
+         <Image source={{uri:job.item.imageURL}} style={{width:"100%",height:"100%",resizeMode:"cover",borderRadius:2}} />
+        <Text style={{color:"#fff",fontWeight:"700",textAlign:"center",position:"absolute",bottom:8,width:"100%"}}>
+    {job.item.title}
+        </Text>
+        
+        </TouchableOpacity>
+    )
+}
+
 const JobRow=({navigation})=>{
     return (
         <View style={{marginBottom:8}}>
@@ -241,16 +166,7 @@ const JobRow=({navigation})=>{
 horizontal={true}
 data={[{title:"Table"},{title:"Sofa"},{title:"Bed Making"}]}
 renderItem={(job)=>(
-    <TouchableOpacity
-    onPress={()=>navigation.navigate("Home-Stack",{screen:"Add-Item"})}
-     style={{marginRight:8,width:96,height:96,backgroundColor:"rgba(0,0,0,0.32)",borderRadius:2}}>
-    <Text style={{color:"#fff",fontWeight:"700",textAlign:"center",position:"absolute",bottom:8,width:"100%"}}>
-{job.item.title}
-    </Text>
-    
-    </TouchableOpacity>
-
-
+   <Job job={job}/>
 )}
  />
 
@@ -258,28 +174,44 @@ renderItem={(job)=>(
     )
 }
 
-const MyJobs=({navigation})=>{
+const AddNewJob =({navigation})=>{
     return (
-        <View style={{marginHorizontal:30,alignItems:"center"}}>
-  <TouchableOpacity
-    onPress={()=>navigation.navigate("Home-Stack",{screen:"Add-Item"})}
-     style={{marginRight:8,width:96,height:96,backgroundColor:"rgba(250, 250, 250, 1)",borderRadius:2,justifyContent:"center",alignItems:"center"}}>
-     <Image source={require("../../assets/images/add-a-job.png")} /> 
-    <Text style={{color:"rgba(0,0,0,0.3)",fontWeight:"700",textAlign:"center",position:"absolute",bottom:8,width:"100%"}}>
+        <View style={{alignItems:"center"}}>
+        <TouchableOpacity
+          onPress={()=>navigation.navigate("Home-Stack",{screen:"Add-Item"})}
+           style={{marginRight:8,width:96,height:96,backgroundColor:"rgba(250, 250, 250, 1)",borderRadius:2,justifyContent:"center",alignItems:"center"}}>
+           <Image source={require("../../assets/images/add-a-job.png")} /> 
+          <Text style={{color:"rgba(0,0,0,0.3)",fontWeight:"700",textAlign:"center",position:"absolute",bottom:8,width:"100%"}}>
+      
+      Add a job
+      
+          </Text>
+          
+          </TouchableOpacity>
+      {/* <FlatList
+      data={[1,2]}
+      renderItem={(item)=>(
+          <JobRow navigation={navigation} />
+          
+      )}
+       /> */}
+      
+              </View>
+    )
+}
 
-Add a job
+const MyJobs=({navigation,jobs})=>{
+    return (
+        <View style={{alignItems:"center"}}>
+        <FlatList
+        data={jobs}
+        numColumns={3}
+        renderItem={(item)=>(
+            <Job job={item} navigation={navigation} />
+        )}
+        keyExtractor={(item, index) => index}
 
-    </Text>
-    
-    </TouchableOpacity>
-{/* <FlatList
-data={[1,2]}
-renderItem={(item)=>(
-    <JobRow navigation={navigation} />
-    
-)}
- /> */}
-
+        />
         </View>
     )
 }

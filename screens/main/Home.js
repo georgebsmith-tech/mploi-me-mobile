@@ -12,6 +12,7 @@ import {Location,Permissions} from 'expo'
 
 import Loader from '../../components/Loader'
 import ScreenWrapper from '../../components/ScreenWrapper';
+import StatuLoader from '../../components/StatusLoader';
 
 
 const wait = (timeout) => {
@@ -68,7 +69,7 @@ const [selectedCat,setSelectedCat]=useState(0)
     ])
     if(isLoading){
  return (
-        <Loader />
+        <StatuLoader />
     )
     }
    
@@ -85,14 +86,14 @@ const [selectedCat,setSelectedCat]=useState(0)
                 <Text style={{ fontSize: 24, fontWeight: "400", marginTop: 16,paddingBottom:10 }}>
                     Let’s Explore jobs 🔎
                 </Text>
-                <Image source={{uri:user.avatar}} style={{width:40,height:40,borderRadius:100,resizeMode:"cover"}}/>
+                <Image source={{uri:userContext.user.avatar}} style={{width:40,height:40,borderRadius:100,resizeMode:"cover"}}/>
 
                 </View>
             </View>
 
   
             <View style={{ alignItems: "center", paddingVertical: 36.4 }}>
-                <View style={{ position: "absolute", bottom: 50, zIndex: 10, width: "100%", paddingHorizontal: 16, height: "100%", paddingTop: 80 }}>
+                <View style={{ position: "absolute", bottom: 30, zIndex: 10, width: "100%", paddingHorizontal: 16, height: "100%", paddingTop: 80 }}>
                     <Text style={{ fontSize: 16, fontWeight: "700", color: "#fff" }}>
                         Phone Sales
                     </Text>
@@ -106,7 +107,9 @@ const [selectedCat,setSelectedCat]=useState(0)
                       <Rate rate={4.0} />
                     </View>
                 </View>
-                <Image source={require("../../assets/images/home.png")} />
+                <Image source={require("../../assets/images/home.png")} 
+                    style={{resizeMode:"cover",width:"100%",height:160,borderRadius:20}}
+                />
             </View>
   <View style={{ height: 80 }}>
                 <ScrollView
@@ -193,13 +196,17 @@ const JobListings = ({ navigation,jobs }) => {
 
 
 const Job = ({ job, navigation }) => {
-    console.log(job)
+    console.log(job.imageURL)
     return (
         <TouchableOpacity
             onPress={() => navigation.navigate("Home-Stack", { screen: "Job-Detailed",job})}
             style={{ flexDirection: "row",marginBottom: 15 }}>
             <View style={{ marginRight: 20 }}>
-                <Image source={require("../../assets/images/job1.png")} />
+                <Image
+                style={{width:100,height:100}}
+                 source={{uri:job.imageURL}} 
+
+                 />
             </View>
             <View style={{ flex: 1 }}>
                 <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>

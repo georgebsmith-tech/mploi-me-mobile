@@ -23,6 +23,7 @@ import UserLinksGroup from '../../components/UserLinksGroup';
 import UserHeader from '../../components/UserHeader';
 import Loader from '../../components/Loader'
 import ReportModal from '../../components/modals/ReportModal';
+import ScreenWrapper from '../../components/ScreenWrapper';
 
 
 // import {} from '@react-native-community/async-storage'
@@ -87,6 +88,7 @@ useEffect(() => {
     }
 
     return (
+        <ScreenWrapper>
         <SafeAreaView style={{flex: 1,height:windowHeight}}>
         <ReviewsModal
          user={user} 
@@ -107,7 +109,7 @@ useEffect(() => {
 
             
 
-            <View style={{paddingTop:20,paddingHorizontal:20}}>
+            <View style={{paddingHorizontal:20}}>
  <UserHeader navigation={navigation}>
  {
      userContext.user.role==="buyer" && <TouchableOpacity 
@@ -166,6 +168,7 @@ useEffect(() => {
 
         </View>
 </SafeAreaView>
+</ScreenWrapper>
 
     )
 }

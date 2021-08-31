@@ -22,15 +22,15 @@ const userContext= useContext(UserContext)
         FileSystem.readAsStringAsync(image.uri,{encoding:FileSystem.EncodingType.Base64})
         .then(async string=>{
             // log(string);
-            log(string)
-            log()
-            log()
+        
 uri="data:image/png;base64, "+string
 setUri(uri)  
 const body ={uri}
 
 data = await sendRequest(body, "put", `users/avatar/` + userContext.user._id)
 console.log(data)
+
+userContext.setUser(data)
         })
       
         // setError("")

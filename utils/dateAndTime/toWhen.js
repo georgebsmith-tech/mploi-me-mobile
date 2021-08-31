@@ -2,7 +2,13 @@ export default function(date){
     const today = new Date()
     let when 
     const timeDifference =toTimeStamp(today)-toTimeStamp(date)
-    if(timeDifference>=60*60){
+    if(timeDifference>=24*60*60*7){
+        const weeks=Number.parseInt(timeDifference/(3600*24*7))
+        when =`${weeks}hr ago`
+    }else if(timeDifference>=24*60*60){
+        const days=Number.parseInt(timeDifference/(3600*24))
+        when =`${days}hr ago`
+    }else if(timeDifference>=60*60){
         const hr=Number.parseInt(timeDifference/3600)
         when =`${hr}hr ago`
     

@@ -1,19 +1,19 @@
-import React from 'react';
-import type { Node } from 'react';
+import React,{useState,useEffect} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import * as GoogleSignIn from 'expo-google-sign-in';
 import {
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   TouchableOpacity,
 
   Button,
   View,
   Image,
 } from 'react-native';
+
 
 import {
   Colors,
@@ -24,6 +24,30 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 const App = ({ navigation }) => {
+//  GoogleSignIn.signInAsync()
+
+//   const [userGoogleInfo,setuserGoogleInfo]=useState({})
+
+//   const googleAuth=()=>{
+//     const config={
+
+//     }
+
+//   }
+
+
+  // const initAsync = async () => {
+  //   await GoogleSignIn.initAsync({
+  //     // You may ommit the clientId when the firebase `googleServicesFile` is configured
+  //     clientId: '965894555274-b2cn5fos9mq53rd83lbj92dv7nijckf6.apps.googleusercontent.com',
+  //   });
+   
+  // };
+
+  // useEffect(() => {
+  //   initAsync()
+  //   }, [])
+  
   return (
     <View
       style={{
@@ -50,10 +74,14 @@ const App = ({ navigation }) => {
 
 
       <View style={{ width: "80%" }}>
+      {/* <GoogleSigninButton 
+onPress={googleAuth}
+      /> */}
         <CustButton
-          doThis={() => navigation.navigate("Home")}
+          doThis={()=>{}}
           bg="rgba(9, 29, 110, 1)" fg="white" title="Join Using Google" icon="google" iColor="#fff" />
-      </View>
+     
+      </View> 
 
       <View style={{ marginTop: 40, flexDirection: "row" }}>
 

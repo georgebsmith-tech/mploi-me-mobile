@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import type { Node } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import sendRequest from '../../utils/server-com/sendRequest'
+import ScreenWrapper from '../../components/ScreenWrapper'
 import {
     StyleSheet,
     Text,
@@ -37,14 +37,13 @@ const App = ({ navigation, route }) => {
 
 
     return (
-      
+      <ScreenWrapper>
         <View
             style={{
                 backgroundColor: 'white',
                 width: "100%",
-                padding: 20,
-                flex: 1,
-                marginTop:70
+                paddingHorizontal: 20,
+                flex: 1
                
             }}>
             <UserHeader navigation={navigation} >
@@ -78,6 +77,7 @@ const App = ({ navigation, route }) => {
             </View>
 
         </View>
+        </ScreenWrapper>
     );
 };
 

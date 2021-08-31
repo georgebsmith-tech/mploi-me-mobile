@@ -8,50 +8,55 @@ import sendRequest from '../../utils/server-com/sendRequest'
 import { UserContext } from '../../context/provider/UserProvider';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+import ScreenWrapper from '../../components/ScreenWrapper';
+import StatuLoader from '../../components/StatusLoader';
+import { UserJobsContext } from '../../context/provider/UserJobsProvider';
 
 const log = console.log
 
 const AddItem =({navigation})=>{
+
+  const [isLoading,setIsLoading] =useState(false)
        const [isEnabled,setIsEnabled]=useState(false)
        const [title,setTitle]=useState("")
          const [description,setDescription]=useState("")
            const [price,setPrice]=useState(null)
              const [url,setUrl]=useState("")
                  const [error, setError] = useState("")
-             const [submitting, setSubmitting] = useState(false)
+        const userJobsContext = useContext(UserJobsContext)
         const userContext = useContext(UserContext)
 
-            const [image, setImage] = useState({})
+            const [image, setImage] = useState("")
       const [uri, setUri] = useState()
 
-                 const sendInfo = async () => {
+    const sendInfo = async () => {
+      setIsLoading(true)
         setError("")
-        setSubmitting(true)
-        const body =new FormData()
-        body.append("title",title)
-        body.append("description",description)
-         body.append("price",price)
-               body.append("enabled",isEnabled)
-                 body.append("category","Tech")
-                   body.append("image",image)
+        const string=await FileSystem.readAsStringAsync(uri,{encoding:FileSystem.EncodingType.Base64})
+        
+            // log(string);
+        
+const image ="data:image/png;base64, "+string
+        // const body =new FormData()
+        // body.append("title",title)
+        // body.append("description",description)
+        //  body.append("price",price)
+        //        body.append("enabled",isEnabled)
+        //          body.append("category","Tech")
+        //            body.append("image",image)
 
-    
-        // const body = { title,description,url,price,enabled:isEnabled ,category:"Tech"}
-        const data = await sendRequest(body, "post", `jobs/add-a-job/` + userContext.user._id,true)
+        const body = { title,description,url,price,enabled:isEnabled ,category:"Tech",image,url:"this"}
+        const data = await sendRequest(body, "post", `jobs/add-a-job/` + userContext.user._id)
         // const data = await sendRequest("", "get", `users/local-registration`
-        setSubmitting(false)
-        console.log("hre"+data)
-            console.log(body)
         if (data.error) {
             log(data.error)
             Alert.alert(data.error)
             setError(data.error)
 
         } else {
-            log(data)
-            const id = data._id
-
-            log(id)
+userJobsContext.setJobs([data,...userJobsContext.jobs])
+            setIsLoading(false)
            navigation.push("Job-Upload-Success")
         }
 
@@ -97,15 +102,20 @@ const AddItem =({navigation})=>{
             console.log(image)
             setImage(image)
             setUri(result.uri)
-                  console.log(image)
+          
     }
+
+
 
     
     return (
      
-        
-    <View style={{flex:1,backgroundColor:"#fff",padding:20}}>
-    <ScrollView style={{flex:1}}>
+        <ScreenWrapper>
+    <View style={{flex:1,backgroundColor:"#fff",paddingHorizontal:20}}>
+    {
+      isLoading && <StatuLoader />
+    }
+ 
     <UserHeader navigation={navigation}>
     <Text style={{fontSize:16,fontWeight:"700",color:"rgba(107, 119, 168, 1)"}}>
     Add Item
@@ -121,6 +131,9 @@ Save
     </TouchableOpacity>
 
     </UserHeader>
+    <ScrollView 
+    showsVerticalScrollIndicator={false}
+    tyle={{flex:1}}>
 
  {/* image ?
                         <>
@@ -190,6 +203,7 @@ Show this item
 
 <View>
 <Switch
+showsVerticalScrollIndicator={false}
  trackColor={{ false: "#767577", true: "#81b0ff" }}
         thumbColor={isEnabled ? "rgba(9, 29, 110, 1)" : "#f4f3f4"}
         ios_backgroundColor="#3e3e3e"
@@ -206,6 +220,7 @@ When you hide item customers wont see it.
 </View>
     </ScrollView>
     </View>
+    </ScreenWrapper>
 
     )
 
