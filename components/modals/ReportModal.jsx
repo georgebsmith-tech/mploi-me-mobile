@@ -21,7 +21,7 @@ export default function ReportModal({navigation,isVisible,setIsVisible,user}) {
             <View style={{ alignItems: "center", marginBottom: 20 }}>
                 <TouchableOpacity>
                     <Text style={{ color: "rgba(107, 119, 168, 1)", fontWeight: "700" }}>
-                        Report This guy
+                        Report
                     </Text>
                 </TouchableOpacity>
 
@@ -39,7 +39,7 @@ export default function ReportModal({navigation,isVisible,setIsVisible,user}) {
             <View style={{ marginBottom: 25, padding: 17.5 }}>
 
                 <TextInput
-                    placeholder={`Rate armstrong`}
+                    placeholder= {`Report ${user.lastName} ${user.firstName}`}
                     multiline={true}
                     numberOfLines={8}
                     onChangeText={() => { }}
@@ -48,9 +48,11 @@ export default function ReportModal({navigation,isVisible,setIsVisible,user}) {
 
             </View>
             <View style={{ alignItems: "center", marginBottom: 35 }}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>setIsVisible(false)}
+                >
                     <Text style={{ color: "rgba(235, 87, 87, 1)", fontWeight: "700" }}>
-                        Report This guy
+                    {`Report ${user.lastName} ${user.firstName}`}
                     </Text>
                 </TouchableOpacity>
 

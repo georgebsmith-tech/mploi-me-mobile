@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useContext ,useCallback
+import React, { useEffect, useState, useContext ,useCallback,useRef
 } from 'react'
 
 
-import { View, Text, Image, FlatList, StyleSheet, TextInput, TouchableOpacity, ScrollView,RefreshControl } from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, TextInput, TouchableOpacity, ScrollView,RefreshControl,Keyboard } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import sendRequest from '../../utils/server-com/sendRequest'
 
@@ -10,12 +10,17 @@ import {getDate} from '../../utils/dateAndTime/getDate'
 
 import StatusLoader from '../../components/StatusLoader'
 import ScreenWrapper from '../../components/ScreenWrapper';
+import SearchFilterModal from '../../components/modals/SearchFilterModal'
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-const Explore = () => {
+const Explore = ({navigation}) => {
+
+    const [searchTerm,setSearchTerm]=useState("")
+    const searchInputref=useRef()
+    console.log(searchTerm)
 
 
 useEffect(() => {
@@ -25,23 +30,54 @@ setCurrent(0)
 const [current,setCurrent]=useState(0)
     const when = ["All", "Today", "Yesterday", "This month", "Last Month"]
     const jobs = [{ price: 200 }, { price: 300 }, { price: 900 }, { price: 800 }, { price: 700 }, { price: 800 }, { price: 700 }]
+
+    const clearSearchInput=()=>{
+        console.log("clicked")
+        searchInputref.current.clear()
+        setSearchTerm("")
+        Keyboard.dismiss()
+    }
+const [isVisible,setIsVisible]=useState(false)
+
     return (
         <ScreenWrapper>
+        
+            <SearchFilterModal 
+            navigation={navigation} 
+             isVisible={isVisible}
+              setIsVisible={setIsVisible}
+
+              />
         <View style={{ backgroundColor: "#fff", paddingHorizontal: 20, flex: 1 }}>
       
 
-            <View style={{  marginBottom: 24, flexDirection: "row", justifyContent: "space-between" }}>
+            <View style={{  marginBottom: 24, flexDirection: "row", justifyContent: "space-between" ,alignItems:"center"}}>
                 <Text style={{ fontWeight: "700", fontSize: 24 }}>
                     Explore
                 </Text>
-                <TouchableOpacity >
-                    <Icon name="filter" size={28} />
+                <TouchableOpacity
+                onPress={()=>setIsVisible(true)}
+                 >
+                <Image source={require("../../assets/images/filter.png")} />
                 </TouchableOpacity>
             </View>
 
 
             <View>
-                <TextInput placeholder="Explore gigs" style={styles.input} />
+
+                <TextInput
+                ref={searchInputref}
+                onChangeText={text=>setSearchTerm(text)}
+                 placeholder="Explore gigs" style={styles.input} />
+                <Image source={require("../../assets/images/search.png")} style={{position:"absolute",top:20}} />
+                {
+searchTerm ? <TouchableOpacity
+onPress={clearSearchInput}
+style={{position:"absolute",right:20,top:20}}>
+<Image source={require("../../assets/images/cancel.png")}  />
+</TouchableOpacity>:<View />
+                }
+          
             </View>
             <View style={{ height: 80 }}>
                 <ScrollView
@@ -201,7 +237,8 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         borderWidth: 1,
         backgroundColor: "rgba(224, 224, 224, 0.3)",
-        fontWeight: "700"
+        fontWeight: "700",
+        paddingLeft:30
     }
 
 })

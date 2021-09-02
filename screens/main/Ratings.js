@@ -24,6 +24,7 @@ import colors from '../../config/colors'
 import CustomButton from '../../components/buttons/CustomButton';
 import UserHeader from '../../components/UserHeader'
 import Heading from '../../components/Heading'
+import StatusLoader from '../../components/StatusLoader';
 
 const Rating = ({ navigation,route }) => {
   const user =route.params.user
@@ -31,31 +32,36 @@ const Rating = ({ navigation,route }) => {
 
     const [text,setText]=useState("")
     const [rating,setRating]=useState(0)
-     const [error, setError] = useState("")
+    const [error, setError] = useState("")
 
-
-     const sendInfo = async () => {
-
-       const body={text,rating,ratedBy:{
-         userID:userContext.user._id,
-         firstName:userContext.user.firstName,
-         lastName:userContext.user.lastName,
-         profession:userContext.user.profession
-       }}
-       console.log(body)
-    const data = await sendRequest(body, "put", `users/rates/${user._id}`)
-
-    if (data.error) {
-      setError(data.error)
+    const [isLoading,setIsloading]=useState(false)
+    
+    
+    const sendInfo = async () => {
+      setIsloading(true)
+      const body={text,rating,ratedBy:{
+        userID:userContext.user._id,
+        firstName:userContext.user.firstName,
+        lastName:userContext.user.lastName,
+        profession:userContext.user.profession
+      }}
+      console.log(body)
+      const data = await sendRequest(body, "put", `users/rates/${user._id}`)
+      
+      if (data.error) {
+        setError(data.error)
     } else {
       console.log(data)
-      // navigation.navigate("Gender", { email,id,firstName:data.firstName })
+      alert(`You have successfully rated ${user.lastName} ${user.lastName}`)
+      navigation.pop()
     }
 
-
-
+    setIsLoading(false)
+    
+    
+    
   }
-
+  
   return (
     <View
       style={{
@@ -65,6 +71,8 @@ const Rating = ({ navigation,route }) => {
         flex: 1,
         paddingTop: 40
       }}>
+  
+
       <UserHeader navigation={navigation} >
      <TouchableOpacity
      onPress={sendInfo}
@@ -76,6 +84,10 @@ Rate
      </TouchableOpacity>
 
       </UserHeader>
+
+      {
+        isLoading && <StatusLoader/>
+      }
 <Heading caption={`Rate ${user.lastName} ${user.firstName}. ⭐`} question={`how do you feel about ${user.lastName} ${user.firstName}?`}/>
 
       <View style={{ marginBottom: 25,padding:17.5 }}>

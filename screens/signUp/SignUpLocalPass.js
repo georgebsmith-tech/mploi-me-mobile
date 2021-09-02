@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
-import type { Node } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import sendRequest from '../../utils/server-com/sendRequest'
 import {
@@ -11,22 +10,14 @@ import {
   TextInput,
   View,
   Dimensions,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicator
 } from 'react-native';
 
 // import { AsyncStorage } from '@react-native-async-storage/async-storage'
 
 import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper'
 
-
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
 import colors from '../../config/colors'
 
@@ -40,6 +31,7 @@ const App = ({ navigation, route }) => {
 // })()
   const deviceHeight=Dimensions.get("window").height
   const [error, setError] = useState("")
+  const [isLoading,setIsloading]=useState(false)
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -49,15 +41,17 @@ const App = ({ navigation, route }) => {
   const {email,id} = route.params
 
   const sendInfo = async () => {
+    setIsloading(true)
     const body = { email, password, repeatPassword, username }
     const data = await sendRequest(body, "post", `users/register-pass`)
     // const data = await sendRequest("", "get", `users/local-registration`
     if (data.error) {
       setError(data.error)
     } else {
+
       navigation.navigate("Gender", { email,id,firstName:data.firstName })
     }
-
+    setIsloading(false)
 
 
   }
@@ -144,7 +138,7 @@ const App = ({ navigation, route }) => {
       <View style={{ width: "80%" }}>
         <CustButton
           nextPage={sendInfo}
-          bg="rgba(9, 29, 110, 1)" fg="white" title="Join Mploi-me" iColor="#fff" />
+          bg="rgba(9, 29, 110, 1)" fg="white" title={isLoading?<ActivityIndicator color="white" />: "Join Mploi-me"} iColor="#fff" />
       </View>
 
     </View>

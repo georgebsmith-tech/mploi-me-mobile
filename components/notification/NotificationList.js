@@ -19,6 +19,16 @@ const NotificationList=({notices,navigation})=>{
 
   const gottenDates=[]
 
+  if(notices.length===0){
+      return (
+          <View style={{flex:1,justifyContent:"center",alignItems:"center"}}>
+              <Text>
+                  You have no Notifications
+              </Text>
+          </View>
+      )
+  }
+
     return (
         <View>
          <ScrollView

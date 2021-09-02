@@ -86,9 +86,19 @@ useEffect(() => {
             <View style={{ alignItems: "center", marginTop: 30 }}>
                 <View>
   <View>
-                    <Image source={{uri:userContext.user.avatar}} 
+                  {
+                      userContext.user.avatar.length<=15? <View style={{justifyContent:"center",alignItems:"center",width:80,height:80,backgroundColor:"rgba(255,0,100,1)",borderRadius:24}}>
+                      <Text style={{fontWeight:"700",fontSize:19,color:"#fff",justifyContent:"center",alignItems:"center",textAlign:"center"}}>
+                          {
+                              `${userContext.user.lastName[0]}${userContext.user.firstName[0]}`
+                          }
+                      </Text>
+
+                      </View>
+                      : <Image source={{uri:userContext.user.avatar}} 
                     style={{width:80,height:80,resizeMode:"cover",borderRadius:24,borderColor:"rgba(237, 237, 237, 1)",borderWidth:2,borderRadius:24}}
                     />
+                  }
                     </View>
                                   <TouchableOpacity
                                   onPress={()=>setPickCameraModalIsOpen(true)}
@@ -148,7 +158,7 @@ const Job=({job,navigation})=>{
     }
     return (
         <TouchableOpacity
-        onPress={()=>{}}
+        onPress={()=>{navigation.navigate("Home-Stack",{screen:"Job-Detailed",params:{job:job.item}})}}
          style={{marginRight:8,width:96,height:96,backgroundColor:"rgba(0,0,0,0.32)",borderRadius:2,marginBottom:8}}>
          <Image source={{uri:job.item.imageURL}} style={{width:"100%",height:"100%",resizeMode:"cover",borderRadius:2}} />
         <Text style={{color:"#fff",fontWeight:"700",textAlign:"center",position:"absolute",bottom:8,width:"100%"}}>

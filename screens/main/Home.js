@@ -203,7 +203,7 @@ const Job = ({ job, navigation }) => {
             style={{ flexDirection: "row",marginBottom: 15 }}>
             <View style={{ marginRight: 20 }}>
                 <Image
-                style={{width:100,height:100}}
+                style={{width:80,height:80,borderRadius:16}}
                  source={{uri:job.imageURL}} 
 
                  />

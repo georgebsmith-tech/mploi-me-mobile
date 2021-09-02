@@ -55,7 +55,7 @@ const image ="data:image/png;base64, "+string
             setError(data.error)
 
         } else {
-userJobsContext.setJobs([data,...userJobsContext.jobs])
+userJobsContext.setJobs([{...data,createdBy:userContext.user},...userJobsContext.jobs])
             setIsLoading(false)
            navigation.push("Job-Upload-Success")
         }

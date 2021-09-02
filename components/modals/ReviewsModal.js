@@ -46,7 +46,7 @@ Reviews
                      {
                          reviews.length===0?<View style={{alignItems:"center",paddingVertical:20}}>
 <Text>
-Thie User has no reviews yet
+This User has no reviews yet
 </Text>
                          </View>:  <FlatList
                

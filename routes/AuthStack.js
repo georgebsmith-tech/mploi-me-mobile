@@ -21,6 +21,7 @@ import OnBoarding1 from '../screens/signUp/OnBoarding1';
 import OnBoarding2 from '../screens/signUp/OnBoarding2';
 import SignIn from '../screens/signIn/SignIn';
 import GoogleSignIn from '../screens/signIn/GoogleSignIn'
+import {AsyncStorage} from 'react-native';
 
 const AuthStackNavigator = createStackNavigator();
 
@@ -31,6 +32,13 @@ AuthStackNavigator.navigationOptions = {
 };
 
 const AuthStack = () => {
+
+    let id
+    // useEffect(() => {
+        
+        (async function(){
+            id=await AsyncStorage.getItem("userID")
+        })()
     return (
 
         <AuthStackNavigator.Navigator
@@ -41,12 +49,13 @@ const AuthStack = () => {
             }
         }
         >
+        {/* { */}
+            {/* id? */}
+            <>
             <AuthStackNavigator.Screen name="OnBoarding" component={OnBoarding} options={{ title: "Mploi-me", headerTitleAlign: "center", headerShown: false }} />
             <AuthStackNavigator.Screen name="OnBoarding1" component={OnBoarding1} options={{ title: "Mploi-me", headerTitleAlign: "center", headerShown: false }} />
             <AuthStackNavigator.Screen name="OnBoarding2" component={OnBoarding2} options={{ title: "Mploi-me", headerTitleAlign: "center", headerShown: false }} />
             <AuthStackNavigator.Screen name="SignUpHome" component={SignUpHome} options={{ title: "Mploi-me", headerTitleAlign: "center", headerShown: false }} />
-            <AuthStackNavigator.Screen name="Home" component={UserTab} options={{ title: "Mploi-me", headerTitleAlign: "center", headerShown: false }} />
-
             <AuthStackNavigator.Screen name="SignIn" component={SignIn} options={{ title: "", headerStyle: { borderBottomWidth: 0, elevation: 0 } }} />
                 <AuthStackNavigator.Screen name="SignUp" component={SignUpLocal} options={{ title: "", headerStyle: { borderBottomWidth: 0, elevation: 0 } }} />
             <AuthStackNavigator.Screen name="Pass" component={SignUpLocalPass} options={{ title: "", headerStyle: { borderBottomWidth: 0, elevation: 0 } }} />
@@ -73,6 +82,15 @@ const AuthStack = () => {
 
                 <AuthStackNavigator.Screen name="Google-SignIn" component={GoogleSignIn
                 } options={{ title: "", headerShown: false, headerStyle: { borderBottomWidth: 0, elevation: 0 } }} />
+            </>
+            {/* : */}
+            <AuthStackNavigator.Screen name="Home" component={UserTab} options={{ title: "Mploi-me", headerTitleAlign: "center", headerShown: false }} />
+
+        {/* } */}
+            
+
+
+
 
         </AuthStackNavigator.Navigator>
 

@@ -60,11 +60,14 @@ const Notifications = ({navigation}) => {
                 <Text style={{ fontWeight: "700", fontSize: 24 }}>
                     Notifications
                 </Text>
-                <TouchableOpacity style={{ backgroundColor: "rgba(206, 210, 226, 1)", paddingHorizontal: 7, paddingVertical: 3, borderRadius: 5 }}>
+                {
+                    notices.length!==0 && <TouchableOpacity style={{ backgroundColor: "rgba(206, 210, 226, 1)", paddingHorizontal: 7, paddingVertical: 3, borderRadius: 5 }}>
                     <Text>
                         New
                     </Text>
                 </TouchableOpacity>
+                }
+                
             </View>
             <NotificationList 
             notices={notices}
