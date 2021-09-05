@@ -12,13 +12,14 @@ import {
     View,
     Image
 } from 'react-native';
+import RNCountries from '../../utils/countries'
 
 
 import colors from '../../config/colors'
 import UserHeader from '../../components/UserHeader'
+import { FlatList } from 'react-native-gesture-handler';
 const log = console.log
 const App = ({ navigation, route }) => {
-    log("got here")
     const {email,id} = route.params
     const [country, setCountry] = useState("Nigeria")
 
@@ -33,9 +34,14 @@ const App = ({ navigation, route }) => {
 
     }
 
+    const [countries, setCountries] = useState([])
 
+    const searchCountries =(text)=>{
+        setCountry(text)
+        console.log(country)
+        setCountries(RNCountries.filter(deCountry=>deCountry.name.toLowerCase().includes(text.toLowerCase())))
 
-
+    }
     return (
       <ScreenWrapper>
         <View
@@ -65,16 +71,30 @@ const App = ({ navigation, route }) => {
             </View>
 
             <View style={{ flexDirection: "row", marginBottom: 0 }}>
-                <TextInput placeholder="Find your Country" style={styles.input}
+                <TextInput 
+                placeholder="Find your Country" style={styles.input}
                     value={country}
-                    onChangeText={(text) => setCountry(text)} />
-                <TouchableOpacity
+                    onChangeText={(text) => searchCountries(text)} />
+                {/* <TouchableOpacity
                     onPress={() => navigation.push("UserType")}
                     style={{ position: "relative", right: 40, top: 15 }}>
                     <Icon name="search" size={30} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
             </View>
+            <FlatList
+            data={countries} 
+            renderItem={(item)=>(
+                <TouchableOpacity 
+                onPress={()=>{setCountry(item.item.name);setCountries([])}}
+                style={{padding:5,backgroundColor:"#f2f2f2",marginBottom:2}}>
+                    <Text>
+                        {item.item.name}
+                    </Text>
+                </TouchableOpacity>
+            )}
+            keyExtractor={(item,index)=>index}
+            />
 
         </View>
         </ScreenWrapper>

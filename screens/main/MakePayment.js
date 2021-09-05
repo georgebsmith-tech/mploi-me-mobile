@@ -1,5 +1,5 @@
-import React from 'react';
-import type { Node } from 'react';
+import React,{useState,useRef} from 'react';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
     StyleSheet,
@@ -14,13 +14,29 @@ import {
 import CustomButton from '../../components/buttons/CustomButton'
 import UserHeader from '../../components/UserHeader';
 
-
+import {commafy} from '../../utils/commafy'
 import colors from '../../config/colors';
 import ScreenWrapper from '../../components/ScreenWrapper';
 
 
+
 const MakePayment = ({ navigation,route }) => {
-    console.log(route)
+    const durationRef=useRef()
+  const {job,user}=route.params
+  const [duration,setDuration]=useState(0)
+  const increaseDuration=()=>{
+      const newValue=duration*1+1
+      console.log(newValue)
+      setDuration(newValue)
+    
+  }
+
+  const decraseDuration=()=>{
+    const newValue=duration===0?0:duration*1-1
+    console.log(newValue)
+    setDuration(newValue)
+  }
+  console.log(duration)
     return (
         <ScreenWrapper>
         <View
@@ -47,11 +63,42 @@ const MakePayment = ({ navigation,route }) => {
       <Text style={{marginBottom:5,color:"rgba(130, 130, 130, 1)"}}>
 Duration of job
       </Text>
-          <TextInput
+      <View>
+      {/* <TextInput
+      ref={durationRef}
           keyboardType = 'numeric'
           maxValue={200}
           minValue={0}
-           placeholder="Select Duration" style={styles.input} value={""} onChangeText={(text) => {}} />
+          value={duration}
+          onChangeText={(text)=>setDuration(text)}
+           placeholder="Select Duration" style={styles.input} /> */}
+           <Text style={styles.input}>
+               {duration}
+           </Text>
+           <View 
+           style={{position:"absolute",right:10,height:"100%",bottom:-6}}
+           >
+           <TouchableOpacity
+           onPress={increaseDuration}
+           style={styles.spinnerContainer}
+           >
+           <Image
+           style={styles.spinner}
+            source={require("../../assets/images/spin-up.png")} />
+           </TouchableOpacity>
+            
+           <TouchableOpacity
+            onPress={decraseDuration}
+                style={styles.spinnerContainer}
+           >
+           <Image
+             style={styles.spinner}
+            source={require("../../assets/images/spin-down.png")} />
+           </TouchableOpacity>
+           </View>
+
+      </View>
+     
         </View>
 
             <View style={{ alignItems: "center", marginTop: 30 }}>
@@ -61,14 +108,19 @@ You’ll be charged
             </View>
             <View style={{ alignItems: "center", marginTop: 10 }}>
                 <Text style={{ fontSize: 20, fontWeight: "700",color:"rgba(9, 29, 110, 1)" }}>
-           N 23,5000.00
+           N {commafy(job.price)}
                 </Text>
                 <Text style={{ textAlign: "center", marginTop: 20,paddingHorizontal:30 }}>
             Your money is secured with us and we will only release the payment to the seller when the job is completed.
                 </Text>
             </View>
 
-            <CustomButton title="Make-Payment" mt={80} next={() => navigation.navigate("Profile")} />
+            <CustomButton 
+            title="Make Payment"
+             mt={80} 
+             next={() => navigation.navigate("Paystack-Payment",{job,user})}
+
+              />
 
         </View>
         </ScreenWrapper>
@@ -91,7 +143,15 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         backgroundColor: "rgba(224, 224, 224, 0.3)",
-        fontWeight: "700"
+        fontWeight: "700",
+        // backgroundColor:"red",
+        paddingRight:25
+    },
+    spinner:{
+       
+    },
+    spinnerContainer:{
+padding:8
     }
 
 })

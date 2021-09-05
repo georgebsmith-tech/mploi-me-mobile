@@ -53,7 +53,8 @@ This User has no reviews yet
                data={reviews}
 
                renderItem={(item)=>(<Review review={item.item}/>)}
-               showsVerticalScrollIndicator={false}
+
+           showsVerticalScrollIndicator={false}
                keyExtractor={(item)=>item.createdAt}
 
                 />

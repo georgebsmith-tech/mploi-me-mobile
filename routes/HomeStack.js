@@ -24,6 +24,7 @@ import MakePayment from '../screens/main/MakePayment';
 import MapScreen from '../screens/main/MapScreen';
 
 import MyJobs from '../screens/main/MyJobs'
+import PaystackPayment from '../screens/main/PaystackPayment'
 
 
 import JobUploadSuccess from '../screens/main/JobUploadSuccess';
@@ -75,6 +76,11 @@ const HomeStack = ({ route: { params } }) => {
             name="Job-Payment-Notification"
             initialParams={params}
        component={JobPaymentNotification} options={{ title: "", headerShown: false, headerStyle: { borderBottomWidth: 0, elevation: 0 } }} />
+
+<AuthStackNavigator.Screen
+            name="Paystack-Payment"
+            initialParams={params}
+       component={PaystackPayment} options={{ title: "", headerShown: false, headerStyle: { borderBottomWidth: 0, elevation: 0 } }} />
 
        
 

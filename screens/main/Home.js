@@ -8,11 +8,12 @@ import sendRequest from '../../utils/server-com/sendRequest'
 import { UserContext } from '../../context/provider/UserProvider';
 import Rate from '../../components/Rate'
 import {Location,Permissions} from 'expo'
-
-
 import Loader from '../../components/Loader'
 import ScreenWrapper from '../../components/ScreenWrapper';
 import StatuLoader from '../../components/StatusLoader';
+import { commafy } from '../../utils/commafy';
+// import CountryPicker from 'react-native-country-picker-modal';
+
 
 
 const wait = (timeout) => {
@@ -21,12 +22,12 @@ const wait = (timeout) => {
 
 const log = console.log
 const Home = ({ navigation, route }) => {
-    log(Location)
-
+    const [selectedCallingCode, setSelectedCallingCode] = useState('90');
+// console.log(countries)
 
 const getLocation=async ()=>{
     const {status} = await Permissions.askAsync(permissions.Location)
-    log("this"+status)
+
 }
 
     const userContext = useContext(UserContext)
@@ -90,6 +91,15 @@ const [selectedCat,setSelectedCat]=useState(0)
 
                 </View>
             </View>
+            <View style={{backgroundColor:"red"}}>
+  {/* <CountryPicker 
+  cca2={country}
+          translation='eng'
+
+          onSelect={(value)=> console.log(value)}
+
+  /> */}
+</View>
 
   
             <View style={{ alignItems: "center", paddingVertical: 36.4 }}>
@@ -196,7 +206,7 @@ const JobListings = ({ navigation,jobs }) => {
 
 
 const Job = ({ job, navigation }) => {
-    console.log(job.imageURL)
+
     return (
         <TouchableOpacity
             onPress={() => navigation.navigate("Home-Stack", { screen: "Job-Detailed",job})}
@@ -222,7 +232,7 @@ const Job = ({ job, navigation }) => {
                 </View>
 
                 <Text style={{ fontSize: 12, fontWeight: "700", marginTop: 9,color:"rgba(58, 74, 139, 1)" }}>
-                    ₦{job.price}
+                    ₦{commafy(job.price)}
                 </Text>
             </View>
         </TouchableOpacity>

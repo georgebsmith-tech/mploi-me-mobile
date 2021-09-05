@@ -4,9 +4,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { View, Text, Image, FlatList, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, TextInput,Dimensions } from 'react-native';
 import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper'
-import { getDateAndTime, getDateAndTime2, getTime } from '../../utils/dateAndTime/getDate';
+import { getDate, getDateAndTime, getDateAndTime2, getTime } from '../../utils/dateAndTime/getDate';
 import { UserContext } from '../../context/provider/UserProvider';
 import sendRequest from '../../utils/server-com/sendRequest'
+import StatuLoader from '../../components/StatusLoader';
 // import ChatAndMapHeader from '../../components/ChatAndMapHeader'
 
 
@@ -63,6 +64,7 @@ const InboxDetailed = ({navigation,route}) => {
     const user=route.params.user
 
     const sendInfo = async () => {
+       
       const body = {primaryUser:userContext.user._id,
         job:job._id,
         secondaryUser:user._id}
@@ -97,7 +99,9 @@ const InboxDetailed = ({navigation,route}) => {
          user={user} 
          job={job}
          navigation={navigation} />
-         
+      {
+          isLoading  &&    <StatuLoader/>
+      }
           
             <View style={{ marginTop: 50, justifyContent: "space-between", flex: 1}}>
                 <Chats chats={chats} />
@@ -197,6 +201,11 @@ const Chat = ({ chat }) => {
     const userContext=useContext(UserContext)
     const left =chat.recipient._id===userContext.user._id
     return (
+        <View>
+
+      <Text  style={{textAlign:"center",marginBottom:5,padding:4,backgroundColor:"#f8f8f8",fontSize:10}}>
+          {getDate(chat.createdAt)}
+      </Text>
         <View style={{ alignItems: left ? "flex-start" : "flex-end" }}>
             <View style={{ paddingHorizontal: 17, paddingVertical: 7, borderRadius: 20, backgroundColor: left ? "rgba(245, 251, 255, 1)" : "rgba(33, 159, 255, 1)", marginBottom: 5,maxWidth:"80%" }}>
                 <Text style={{ color: left ? "rgba(33, 159, 255, 1)" : "#fff", marginBottom: 6 }}>
@@ -207,6 +216,7 @@ const Chat = ({ chat }) => {
                     )}
                 </Text>
             </View>
+        </View>
         </View>
     )
 }

@@ -8,6 +8,7 @@ import { UserContext } from '../../context/provider/UserProvider';
 import toWhen from '../../utils/dateAndTime/toWhen';
 import StatuLoader from '../../components/StatusLoader';
 import ScreenWrapper from '../../components/ScreenWrapper';
+import { StatusBar } from 'expo-status-bar';
 
 
 const Inbox = ({ navigation }) => {
@@ -48,8 +49,14 @@ const userContext = useContext(UserContext)
 //        )
 //    }
 
+if(isLoading){
+    return <StatuLoader/>
+}
+
     return (
         <ScreenWrapper>
+    
+   
         <View style={{ backgroundColor: "#fff", flex: 1, paddingHorizontal: 20 }}>
             <View style={{ alignItems: "center" }}>
 
