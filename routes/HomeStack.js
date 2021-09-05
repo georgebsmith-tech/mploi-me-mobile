@@ -28,6 +28,7 @@ import PaystackPayment from '../screens/main/PaystackPayment'
 
 
 import JobUploadSuccess from '../screens/main/JobUploadSuccess';
+import PaymentSuccess from '../screens/main/PaymentSuccess'
 
 import AddContact from '../screens/main/AddContact'
 import JobPaymentNotification from '../screens/main/JobPaymentNotification';
@@ -81,6 +82,12 @@ const HomeStack = ({ route: { params } }) => {
             name="Paystack-Payment"
             initialParams={params}
        component={PaystackPayment} options={{ title: "", headerShown: false, headerStyle: { borderBottomWidth: 0, elevation: 0 } }} />
+
+       
+<AuthStackNavigator.Screen
+            name="Payment-Success"
+            initialParams={params}
+       component={PaymentSuccess} options={{ title: "", headerShown: false, headerStyle: { borderBottomWidth: 0, elevation: 0 } }} />
 
        
 

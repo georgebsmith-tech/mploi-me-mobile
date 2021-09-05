@@ -38,8 +38,9 @@ const JobDetailed = ({ navigation,route }) => {
      
 
     
-        <View style={{ backgroundColor: "#fff", flex: 1 }}>
-            <Image source={require("../../assets/images/detailed.png")} style={{ width: "100%", height: "100%", resizeMode: "cover" }} />
+        <View style={{ backgroundColor: "rgba(0,0,0,1)", flex: 1 }}>
+        
+            <Image source={{uri:job.imageURL}} style={{ width: "100%", height: "100%", resizeMode: "contain" }} />
 
             <View style={{ backgroundColor: "rgba(0,0,0,0.64)", width: "100%", height: "100%", position: "absolute", justifyContent: "space-between" }}>
                <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>

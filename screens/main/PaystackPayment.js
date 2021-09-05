@@ -25,7 +25,8 @@ const userContext = useContext(UserContext)
           navigation.pop()
         }}
         onSuccess={(res) => {
-          // handle response here
+         console.log(res)
+         navigation.navigate("Payment-Success",{job,user})
         }}
         autoStart={true}
       />
