@@ -14,13 +14,13 @@ import SignUpLocalSelectID from '../screens/signUp/SignUpLocalSelectID'
 import SignUpLocalIDOptions from '../screens/signUp/SignUpLocalIDOptions'
 import SignUpLocalInterests from '../screens/signUp/SignUpLocalInterests'
 import SignUpSucess from '../screens/signUp/SignUpSucess'
-import Home from '../screens/main/Home';
 import UserTab from './UserBottomTab';
 import OnBoarding from '../screens/signUp/OnBoarding';
 import OnBoarding1 from '../screens/signUp/OnBoarding1';
 import OnBoarding2 from '../screens/signUp/OnBoarding2';
 import SignIn from '../screens/signIn/SignIn';
 import GoogleSignIn from '../screens/signIn/GoogleSignIn'
+import Splash from '../screens/signUp/Splash'
 import {AsyncStorage} from 'react-native';
 
 const AuthStackNavigator = createStackNavigator();
@@ -52,6 +52,7 @@ const AuthStack = () => {
         {/* { */}
             {/* id? */}
             <>
+            <AuthStackNavigator.Screen name="Splash" component={Splash} options={{ title: "Mploi-me", headerTitleAlign: "center", headerShown: false }} />
             <AuthStackNavigator.Screen name="OnBoarding" component={OnBoarding} options={{ title: "Mploi-me", headerTitleAlign: "center", headerShown: false }} />
             <AuthStackNavigator.Screen name="OnBoarding1" component={OnBoarding1} options={{ title: "Mploi-me", headerTitleAlign: "center", headerShown: false }} />
             <AuthStackNavigator.Screen name="OnBoarding2" component={OnBoarding2} options={{ title: "Mploi-me", headerTitleAlign: "center", headerShown: false }} />

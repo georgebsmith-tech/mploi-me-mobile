@@ -9,6 +9,7 @@ import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity,AsyncStorage 
 import CustomButton from '../buttons/CustomButton'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import CustomButtom from '../buttons/CustomButton';
 
 // const {Swipeable} = GestureHandler
 // console.log(Swipeable)
@@ -25,7 +26,7 @@ const JobDetailed = ({
     nextPage
   }) => {
   
- 
+let setTime ; 
 
 useEffect(() => {
     
@@ -36,9 +37,13 @@ useEffect(() => {
         navigation.navigate("Home")
     }
   })()
-    // return () => {
-    //     cleanup
-    // };
+  setTime =setTimeout(()=>{
+    navigation.navigate(nextPage)
+  },2000)
+    return () => {
+        clearTimeout(setTime)
+        console.log("Cleaned")
+    };
 }, []);
 
 
@@ -101,7 +106,7 @@ useEffect(() => {
             <Image source={require("../../assets/images/cover.png")} style={{ width: "100%", height: "100%", resizeMode: "cover", position: "absolute", zIndex: 1, top: 170 }} />
             <View style={{ backgroundColor: "rgba(0,0,0)", width: "100%", height: "100%", position: "absolute", justifyContent: "flex-end", zIndex: 5 }}>
                 
-                <View style={{ padding: 18.5, borderRadius: 15,marginBottom:140 }}>
+                <View style={{ padding: 18.5, borderRadius: 15,marginBottom:90 }}>
 
                     <View style={{ alignItems: "center" }}>
                         <Text style={{ fontWeight: "700", fontSize: 32, color: "#fff" }}>
@@ -130,6 +135,15 @@ useEffect(() => {
                
                   
                 </View>
+                {/* <View style={{marginBottom:30}}>
+                <CustomButtom
+                  title="Skip"
+
+                  next={()=>   {clearTimeout(timeIt);navigation.navigate("SignUpHome")}}
+                />
+
+                </View> */}
+            
                   <View style={{ lex: 1, flexDirection: "row", justifyContent: "center", marginBottom: 20 }}>
                         <Image source={progressImage} style={{}} />
                     </View>

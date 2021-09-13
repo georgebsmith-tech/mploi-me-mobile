@@ -12,7 +12,7 @@ import Loader from '../../components/Loader'
 import ScreenWrapper from '../../components/ScreenWrapper';
 import StatuLoader from '../../components/StatusLoader';
 import { commafy } from '../../utils/commafy';
-// import CountryPicker from 'react-native-country-picker-modal';
+import UserAvatar from '../../components/UserAvatar';
 
 
 
@@ -87,19 +87,15 @@ const [selectedCat,setSelectedCat]=useState(0)
                 <Text style={{ fontSize: 24, fontWeight: "400", marginTop: 16,paddingBottom:10 }}>
                     Let’s Explore jobs 🔎
                 </Text>
-                <Image source={{uri:userContext.user.avatar}} style={{width:40,height:40,borderRadius:100,resizeMode:"cover"}}/>
+
+              <UserAvatar 
+              user={userContext.user}
+
+              />
+             
 
                 </View>
             </View>
-            <View style={{backgroundColor:"red"}}>
-  {/* <CountryPicker 
-  cca2={country}
-          translation='eng'
-
-          onSelect={(value)=> console.log(value)}
-
-  /> */}
-</View>
 
   
             <View style={{ alignItems: "center", paddingVertical: 36.4 }}>
@@ -172,6 +168,9 @@ const [selectedCat,setSelectedCat]=useState(0)
 }
 
 export default Home;
+
+
+
 
 
 const JobListings = ({ navigation,jobs }) => {

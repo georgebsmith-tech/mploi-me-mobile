@@ -87,7 +87,7 @@ useEffect(() => {
                 <View>
   <View>
                   {
-                      userContext.user.avatar.length<=15? <View style={{justifyContent:"center",alignItems:"center",width:80,height:80,backgroundColor:"rgba(255,0,100,1)",borderRadius:24}}>
+                      userContext.user.avatar.length<=15? <View style={{justifyContent:"center",alignItems:"center",width:80,height:80,backgroundColor:userContext.user.userColor,borderRadius:24}}>
                       <Text style={{fontWeight:"700",fontSize:19,color:"#fff",justifyContent:"center",alignItems:"center",textAlign:"center"}}>
                           {
                               `${userContext.user.lastName[0]}${userContext.user.firstName[0]}`

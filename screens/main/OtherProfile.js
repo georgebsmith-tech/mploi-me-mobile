@@ -24,6 +24,7 @@ import UserHeader from '../../components/UserHeader';
 import Loader from '../../components/Loader'
 import ReportModal from '../../components/modals/ReportModal';
 import ScreenWrapper from '../../components/ScreenWrapper';
+import UserAvatar from '../../components/UserAvatar';
 
 
 // import {} from '@react-native-community/async-storage'
@@ -38,9 +39,15 @@ const OtherProfile = ({ navigation, route }) => {
 
 const windowHeight = Dimensions.get('screen').height;
 
-
     const userContext = useContext(UserContext)
-    const [user,setUser]=useState({})
+    const [user,setUser]=useState({ratings:[]})
+    let totalRating=0;
+    user.ratings?.forEach(rate=>{
+      totalRating +=rate.rating
+    })
+    let avgRating=0
+ avgRating =user.ratings.length!==0?(totalRating/user.ratings.length).toFixed(1):0
+
     
     const {id,job}=route.params
     const otherId=id
@@ -52,7 +59,6 @@ const windowHeight = Dimensions.get('screen').height;
      const sendInfo = async (id) => {
 
     const data = await sendRequest("", "get", `users/`+id)
-    console.log(data)
     setUser(data)
       setIsLoading(false)
     // const data = await sendRequest("", "get", `users/local-registration`
@@ -127,9 +133,13 @@ useEffect(() => {
  
             <View style={{ alignItems: "center"}}>
                 <View>
-                    <Image 
- style={{width:80,height:80,resizeMode:"cover",borderRadius:24,borderColor:"rgba(237, 237, 237, 1)",borderWidth:2,borderRadius:24}}
-                    source={{uri:user.avatar}} />
+                  <UserAvatar
+                  user={user}
+                  size={80}
+                  borderRadius={24}
+                  fontSize={19}
+
+                  />
                 </View>
                 <Text style={{ fontWeight: "700", marginTop: 20, marginBottom: 7 }}>
                     {`${user.lastName} ${user.firstName}`}
@@ -137,6 +147,28 @@ useEffect(() => {
                 <Text>
                     @{user.username}
                 </Text>
+                <View style={{flexDirection:"row",alignItems:"center"}}>
+                {
+                    avgRating>=2.5?     <Image 
+                 source={require("../../assets/images/star-good.png")}
+                 style={{marginRight:3}}
+
+                 />:
+                      <Image 
+                 source={require("../../assets/images/star-bad.png")}
+                 style={{marginRight:3}}
+
+                 />
+                }
+            
+                 <Text style={{marginRight:3}}>
+                     {avgRating}
+                 </Text>
+                 <Text>
+                   ({user.ratings?user.ratings.length:0})
+                 </Text>
+                </View>
+
                 <View style={{ backgroundColor:user.verified?"rgba(212, 239, 223, 1)": "rgba(251, 221, 221, 1)", padding: 7, paddingRight: 15, paddingLeft: 15, borderRadius: 100, marginTop: 30, flexDirection: "row", alignItems: "center", marginBottom: 40 }}>
                 {
                    user.verified?<>
@@ -178,7 +210,7 @@ export default OtherProfile;
 
 
 
-const GuestExtra = ({ navigation,user,setReviewModalIsVisible,setReportModalIsVisible }) => {
+const GuestExtra = ({ navigation,user,setReviewModalIsVisible,setReportModalIsVisible}) => {
     const userContext = useContext(UserContext)
     return (
         <View>
@@ -187,7 +219,7 @@ const GuestExtra = ({ navigation,user,setReviewModalIsVisible,setReportModalIsVi
 
                 <View style={{ flex: 1 }}>
                     <Text style={{ color: "rgba(107, 119, 168, 1)", fontSize: 32, fontWeight: "300", textAlign: "center" }}>
-                        230
+                        {user.jobsDone||0}
                     </Text>
                     <Text style={{ textAlign: "center" }}>
                         jobs

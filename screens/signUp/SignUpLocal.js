@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import type { Node } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import sendRequest from '../../utils/server-com/sendRequest'
 // import AsyncStorage from '@react-native-community/async-storage'
@@ -21,6 +20,7 @@ import {
 
 import colors from '../../config/colors'
 import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper';
+import Input from '../../components/form/Input';
 
 const log = console.log
 
@@ -44,9 +44,10 @@ const App = ({ navigation }) => {
   log("async")
  
     // const data = await sendRequest("", "get", `users/local-registration`
-     setSubmitting(false)
+   
     if (data.error) {
       setError(data.error)
+      setSubmitting(false)
      
     } else {
       // console.log(data)
@@ -54,6 +55,7 @@ const App = ({ navigation }) => {
       await AsyncStorage.setItem("signUpID",data._id)
     
       navigation.navigate("Pass", { email,id:data._id })
+      setSubmitting(false)
     }
 
 
@@ -86,15 +88,23 @@ const App = ({ navigation }) => {
             Join Mploi-me
           </Text>
         </View>
-        <View style={{ flexDirection: "row", marginBottom: 25 }}>
-          <TextInput placeholder="Email address" style={styles.input} value={email} onChangeText={(text) => setEmail(text)} />
-        </View>
-        <View style={{ flexDirection: "row", marginBottom: 25 }} >
-          <TextInput placeholder="First Name" style={styles.input} value={firstName} onChangeText={(text) => setFirstName(text)} />
-        </View>
-        <View style={{ flexDirection: "row", marginBottom: 25 }}>
-          <TextInput placeholder="Last Name" style={styles.input} value={lastName} onChangeText={(text) => setLastName(text)} />
-        </View>
+     <Input 
+      placeholder="Email address"
+      onChangeText={(text) => setEmail(text)}
+      value={email}
+       />
+            <Input 
+       placeholder="First Name"
+      onChangeText={(text) => setFirstName(text)}
+      value={firstName}
+       />
+      
+     
+      <Input 
+          placeholder="Last Name" 
+          value={lastName}
+           onChangeText={(text) => setLastName(text)} />
+  
 
 
         <View style={{ width: "80%" }}>

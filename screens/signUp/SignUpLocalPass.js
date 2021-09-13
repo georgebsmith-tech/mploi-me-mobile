@@ -20,6 +20,7 @@ import KeyboardAvoidingWrapper from '../../components/KeyboardAvoidingWrapper'
 
 
 import colors from '../../config/colors'
+import Input from '../../components/form/Input';
 
 
 const log = console.log
@@ -32,6 +33,8 @@ const App = ({ navigation, route }) => {
   const deviceHeight=Dimensions.get("window").height
   const [error, setError] = useState("")
   const [isLoading,setIsloading]=useState(false)
+  const [showPass, setShowPass]= useState(false)
+  const [showConfirmPass, setShowConfirmPass]= useState(false)
 
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -77,26 +80,36 @@ const App = ({ navigation, route }) => {
           Join Mploi-me
         </Text>
       </View>
-      <View style={{ flexDirection: "row", marginBottom: 25 }}>
-        <TextInput
+
+        <Input
           autoCompleteType="username"
-          placeholder="Unique Username" style={styles.input}
-          value={username} onChangeText={text => setUsername(text)}
+          placeholder="Unique Username"
+          value={username}
+           onChangeText={text => setUsername(text)}
         />
-      </View>
-      <View style={{ flexDirection: "row", marginBottom: 25 }}>
-        <TextInput
+ 
+      
+        <Input
+          toggleSecure={true}
           textContentType="password"
-          secureTextEntry={true}
-          placeholder="Password" style={styles.input} value={password} onChangeText={text => setPassword(text)} />
-      </View>
-      <View style={{ flexDirection: "row", marginBottom: 25 }}>
-        <TextInput
+          secureTextEntry={!showPass}
+          placeholder="Password" 
+          onChangeText={text => setPassword(text)}
+          showPass={showPass}
+          setShowPass={()=>{console.log("show");setShowPass(!showPass)}}
+           />
+      
+      
+        <Input
+        toggleSecure={true}
           textContentType="password"
-          secureTextEntry={true}
-          placeholder="Confirm Password" style={styles.input}
-          value={repeatPassword} onChangeText={text => setRepeatPassword(text)} />
-      </View>
+          secureTextEntry={!showConfirmPass}
+          placeholder="Confirm Password" 
+          value={repeatPassword}
+          showPass={showConfirmPass}
+          setShowPass={()=>setShowConfirmPass(!showConfirmPass)}
+          onChangeText={text => setRepeatPassword(text)} />
+
       <View style={{ width: "100%", paddingHorizontal: 40 }}>
 
         <View style={{ justifyContent: "flex-start", width: "100%" }}>

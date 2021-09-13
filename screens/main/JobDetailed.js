@@ -8,6 +8,7 @@ import { UserContext } from '../../context/provider/UserProvider';
 import sendRequest from "../../utils/server-com/sendRequest"
 import ScreenWrapper from '../../components/ScreenWrapper';
 import UserHeader from '../../components/UserHeader';
+import UserAvatar from '../../components/UserAvatar';
 
 
 const JobDetailed = ({ navigation,route }) => {
@@ -72,7 +73,11 @@ const JobDetailed = ({ navigation,route }) => {
                     <Text style={{ color: "rgba(206, 210, 226, 1)", fontSize: 12,fontWeight:"700",marginTop:5 }}>
                        N{job.price}
                     </Text>
-                    <View style={{ backgroundColor: "#fff", paddingHorizontal: 67.17, paddingVertical: 16, marginTop: 40,borderRadius:12 }}>
+                    <View style={{ backgroundColor: "#fff", paddingHorizontal: 16, paddingVertical: 16, marginTop: 40,borderRadius:12,flexDirection:"row",alignItems:"center" }}>
+                    <UserAvatar
+                    borderRadius={8}
+                     user={job.createdBy}/>
+                    <View style={{marginLeft:11.8}}>
                     <TouchableOpacity
                     onPress={()=>navigation.navigate("Other-Profile",{id:job.createdBy._id,job})}
                     >
@@ -83,6 +88,8 @@ const JobDetailed = ({ navigation,route }) => {
                         <Text style={{ color: "rgba(107, 119, 168, 1)", fontSize: 12, marginTop: 8 }}>
                             Stylist
                         </Text>
+                    </View>
+                   
                     </View>
                 </View>
 

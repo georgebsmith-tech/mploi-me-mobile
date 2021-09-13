@@ -20,7 +20,9 @@ const Explore = ({navigation}) => {
 
     const [searchTerm,setSearchTerm]=useState("")
     const searchInputref=useRef()
-    console.log(searchTerm)
+   const searchForTerm=()=>{
+       console.log("clicked to search")
+   }
 
 
 useEffect(() => {
@@ -69,13 +71,24 @@ const [isVisible,setIsVisible]=useState(false)
                 ref={searchInputref}
                 onChangeText={text=>setSearchTerm(text)}
                  placeholder="Explore gigs" style={styles.input} />
-                <Image source={require("../../assets/images/search.png")} style={{position:"absolute",top:20}} />
-                {
-searchTerm ? <TouchableOpacity
+{
+searchTerm ? 
+<>
+<TouchableOpacity
+style={{position:"absolute",top:15,padding:5}}
+onPress={searchForTerm}
+>
+<Image source={require("../../assets/images/search.png")}  />
+</TouchableOpacity>
+              
+                <TouchableOpacity
 onPress={clearSearchInput}
 style={{position:"absolute",right:20,top:20}}>
 <Image source={require("../../assets/images/cancel.png")}  />
-</TouchableOpacity>:<View />
+</TouchableOpacity>
+</>
+:<View />
+
                 }
           
             </View>
@@ -197,24 +210,26 @@ if(current===1){
 
 const Job = ({ job }) => {
 
-    console.log()
     return (
         <View style={{ flexDirection: "row", marginBottom: 15, backgroundColor: "rgba(251, 251, 251, 1)", padding: 10 }}>
             <View style={{ marginRight: 20 }}>
-                <Image source={require("../../assets/images/explore1.png")} />
+                <Image 
+                source={{uri:job.imageURL}} 
+style={{width:52,height:52,borderRadius:16,resizeMode:"cover"}}
+                />
             </View>
             <View style={{ flex: 1 }}>
-                <View style={{flexDirection:"row",justifyContent:"space-between",marginBottom: 10,alignItems:"center"}}>
+                <View style={{flexDirection:"row",justifyContent:"space-between",marginBottom: 7,alignItems:"center"}}>
                     <Text style={{ fontSize: 16, fontWeight: "400" }}>
                        {job.title}
                     </Text>
-                    <Text>
+                    <Text style={{fontSize:12}}>
 {getDate(job.createdAt)}
                     </Text>
                 </View>
                 <View>
                     <Text style={{ fontSize: 14, color: "rgba(130, 130, 130, 1)" }}>
-                           {job.description}
+                           {job.description.substr(0,65)}...
                     </Text>
                 </View>
 

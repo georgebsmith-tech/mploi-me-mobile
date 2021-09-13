@@ -41,7 +41,7 @@ const App = ({ navigation, route }) => {
                 flex: 1,
             }}>
 
-            <View style={{ marginBottom: 65 }}>
+            <View style={{ marginBottom: 30 }}>
                 <Text style={{ fontSize: 14, fontWeight: "700" }}>
                     Let’s get to know you😉, {firstName}
                 </Text>
@@ -50,7 +50,7 @@ const App = ({ navigation, route }) => {
                 </Text>
             </View>
 
-            <View style={{ paddingRight: 40, paddingLeft: 40 }}>
+            <View style={{ paddingRight: 40, paddingLeft: 40 ,flex:1,justifyContent:"center"}}>
                 <View>
                     <TouchableOpacity
                         onPress={() => sendInfo("male")}
@@ -59,7 +59,7 @@ const App = ({ navigation, route }) => {
                         <Text style={{ fontSize: 16, fontWeight: "700", marginLeft: 25, color: colors.primary1 }}>Male</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={{ marginTop: 40, justifyContent: "flex-end", flexDirection: "row", alignItems: "center" }}>
+                <View style={{ marginTop: 70, justifyContent: "flex-end", flexDirection: "row", alignItems: "center" }}>
                     <TouchableOpacity
                         onPress={() => sendInfo("female")}
                         // onPress={() => navigation.push("Country")}
